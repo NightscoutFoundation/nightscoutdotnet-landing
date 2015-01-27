@@ -1,7 +1,7 @@
 extends ../../../layouts/account
 
 block head
-  title Account Settings
+  title Account Group Access
 
 block feet
   script(src='/views/account/settings/index.min.js?#{cacheBreaker}')
@@ -12,9 +12,12 @@ block body
       div.page-header
         h1 Account Settings
         pre
-          =! user
+          != unescape(data.user)
         pre
-          =! JSON.stringify(data.user)
+          | #{ unescape(data.account)}
+        pre
+          | #{ unescape(oauthFacebook)}
+          | #{ unescape(oauthFacebookActive)}
   div.row
     div.col-sm-9
       div#details

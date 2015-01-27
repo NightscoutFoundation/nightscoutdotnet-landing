@@ -30,6 +30,7 @@ var renderSettings = function(req, res, next, oauthMessage) {
       return next(err);
     }
 
+    console.log("OUTCOME", outcome);
     res.render('account/settings/index', {
       data: {
         account: escape(JSON.stringify(outcome.account)),

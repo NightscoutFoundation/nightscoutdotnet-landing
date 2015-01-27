@@ -10,7 +10,7 @@ exports = module.exports = function(req, res) {
   };
 
   workflow.hasErrors = function() {
-    return Object.keys(workflow.outcome.errfor).length !== 0 || workflow.outcome.errors.length !== 0;
+    return workflow.outcome.errfor && (Object.keys(workflow.outcome.errfor).length !== 0 || workflow.outcome.errors.length !== 0);
   };
 
   workflow.on('exception', function(err) {

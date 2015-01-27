@@ -154,6 +154,12 @@ exports = module.exports = function(app, passport) {
   app.put('/account/settings/identity/', require('./views/account/settings/index').identity);
   app.put('/account/settings/password/', require('./views/account/settings/index').password);
 
+  // account > groups
+  var groups = require('./views/account/groups/index');
+  app.all('/account/groups*', groups.ensureFacebook);
+  app.get('/account/groups/', groups.init);
+  app.get('/account/groups/api/*', groups.groups);
+
   //account > settings > social
   app.get('/account/settings/twitter/', passport.authenticate('twitter', { callbackURL: '/account/settings/twitter/callback/' }));
   app.get('/account/settings/twitter/callback/', require('./views/account/settings/index').connectTwitter);

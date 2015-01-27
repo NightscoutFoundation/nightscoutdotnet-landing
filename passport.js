@@ -8,6 +8,7 @@ exports = module.exports = function(app, passport) {
       GoogleStrategy = require('passport-google-oauth').OAuth2Strategy,
       TumblrStrategy = require('passport-tumblr').Strategy;
 
+  console.log('passport local invocation');
   passport.use(new LocalStrategy(
     function(username, password, done) {
       var conditions = { isActive: 'yes' };
@@ -74,11 +75,21 @@ exports = module.exports = function(app, passport) {
   }
 
   if (app.config.oauth.facebook.key) {
+    console.log("USING FB in passport middleware");
     passport.use(new FacebookStrategy({
         clientID: app.config.oauth.facebook.key,
-        clientSecret: app.config.oauth.facebook.secret
+        clientSecret: app.config.oauth.facebook.secret,
+        passReqToCallback: true
       },
-      function(accessToken, refreshToken, profile, done) {
+      function(req, accessToken, refreshToken, profile, done) {
+        console.log('ACCESS TOKEN CALLING DONE', accessToken, profile);
+        app.db.models.User.findOne({ "facebook": { "id": profile.id } }).populate('roles.admin').populate('roles.account').exec(function(err, user) {
+          console.log('foounder user with profile id', user);
+        });
+        var tokens = req.session.tokens || { };
+        tokens.facebook = accessToken;
+        req.session.tokens = tokens;
+
         done(null, false, {
           accessToken: accessToken,
           refreshToken: refreshToken,
