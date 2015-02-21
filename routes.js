@@ -28,9 +28,40 @@ function ensureAccount(req, res, next) {
   res.redirect('/');
 }
 
+// Set up proxy module.
+var proxy = require('./proxy');
+
 exports = module.exports = function(app, passport) {
   //front end
-  app.get('/', require('./views/index').init);
+
+  // Set up proxy module.
+  var myProxy = proxy(app.config.proxy);
+
+  // Some middleware to detect if proxy app should be used or if local
+  // auth/drywall should be used.
+  function maybeProxy (req, res, next) {
+    // Debug.
+    if (req.isAuthenticated( )) {
+      console.log('isAuthenticated');
+    }
+    // If user is not authorized/unknown, use local logic to force signin.
+    if (!req.user || !req.isAuthenticated( )) {
+      console.log('sending to next');
+      return next( );
+    }
+    console.log('myProxy');
+    // Otherwise, proxy.
+    return myProxy(req, res, next);
+
+  }
+
+  // Neither of these variation seems to make much difference.
+
+  // Theory is to allow local logic and views to take over for admin UI
+  // controls, otherwise proxy to single page app with it's own data store.
+  app.get('/', maybeProxy, require('./views/index').init);
+
+  // app.get('/', require('./views/index').init);
   app.get('/about/', require('./views/about/index').init);
   app.get('/contact/', require('./views/contact/index').init);
   app.post('/contact/', require('./views/contact/index').sendMessage);
@@ -177,6 +208,22 @@ exports = module.exports = function(app, passport) {
   app.get('/account/settings/tumblr/callback/', require('./views/account/settings/index').connectTumblr);
   app.get('/account/settings/tumblr/disconnect/', require('./views/account/settings/index').disconnectTumblr);
 
+  /*
+  // Some debug testing, remove.
+  app.all('/x*', ensureAuthenticated);
+  app.all('/x*', ensureAccount);
+  var path = require('path');
+  app.all('/x/*', function (req, res, next) {
+    console.log("X OLD", req.url);
+    req.url = req.url.replace('/x/', '/');
+    console.log("X NEW", req.url);
+    // req.url
+    next( );
+  }, proxy(app.config.proxy));
+  */
+
   //route not found
-  app.all('*', require('./views/http/index').http404);
+  // Proxy anything not listed above or not found into the ORIGIN target if
+  // logged in, otherwise send to usual 404 handler.
+  app.all('*', maybeProxy, require('./views/http/index').http404);
 };
