@@ -36,6 +36,9 @@ function createProxy (opts) {
     console.log("CLOSE");
   });
 
+  proxy.on('error', function (error) {
+    console.log("error", arguments);
+  });
 
   return proxy;
 }
