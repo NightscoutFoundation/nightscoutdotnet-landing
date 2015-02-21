@@ -16,12 +16,12 @@ function createServer(opts) {
   , port: parsed.port || 80
   };
   console.log(parsed);
-  var proxy = httpProxy.createProxyServer({headers: { host: target.host } });
+  var proxy = httpProxy.createProxyServer({headers: { host: target.host }, ws: true });
 
   proxy.on('proxyReq', function (proxyReq, req, res, options) {
     proxyReq.setHeader('X-Custom-Hdr', 'foobar');
     // proxyReq.setHeader('Host', target.host);
-    console.log('proxyReq', proxyReq, options);
+    console.log('proxyReq', options);
   });
   proxy.on('proxyRes', function (proxyRes, req, res) {
     console.log('proxyRes');
@@ -31,7 +31,6 @@ function createServer(opts) {
     // 
     // Put your custom server logic here 
     // 
-    console.log('XX', target, req.url);
     proxy.web(req, res, {
       target: {
         host: target.host
@@ -53,12 +52,15 @@ function createServer(opts) {
     // 
     // Put your custom server logic here 
     // 
+    /*
     server.proxy.ws(req, socket, head, {
       target: {
         host: target.host
       , port: target.port
       }
     });
+    */
+    console.log('upgrading websocket');
   });
   return server;
 }
