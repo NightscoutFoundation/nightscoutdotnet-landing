@@ -41,9 +41,6 @@ exports = module.exports = function(app, passport) {
   // auth/drywall should be used.
   function maybeProxy (req, res, next) {
     // Debug.
-    if (req.isAuthenticated( )) {
-      console.log('isAuthenticated');
-    }
     // If user is not authorized/unknown, use local logic to force signin.
     if (!req.user || !req.isAuthenticated( )) {
       console.log('sending to next');
@@ -59,7 +56,8 @@ exports = module.exports = function(app, passport) {
 
   // Theory is to allow local logic and views to take over for admin UI
   // controls, otherwise proxy to single page app with it's own data store.
-  app.get('/', maybeProxy, require('./views/index').init);
+  // app.get('/', maybeProxy, require('./views/index').init);
+  app.get('/', require('./views/index').init);
 
   // app.get('/', require('./views/index').init);
   app.get('/about/', require('./views/about/index').init);
@@ -225,5 +223,6 @@ exports = module.exports = function(app, passport) {
   //route not found
   // Proxy anything not listed above or not found into the ORIGIN target if
   // logged in, otherwise send to usual 404 handler.
-  app.all('*', maybeProxy, require('./views/http/index').http404);
+  // app.all('*', maybeProxy, require('./views/http/index').http404);
+  app.all('*', require('./views/http/index').http404);
 };

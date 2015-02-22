@@ -33,7 +33,7 @@ function createProxy (opts) {
 
 
   proxy.on('close', function (req, socket, head) {
-    console.log("CLOSE");
+    console.log("CLOSE", head, req);
   });
 
   proxy.on('error', function (error) {
@@ -46,7 +46,7 @@ function createProxy (opts) {
 function middleware (opts) {
   var proxy = createProxy(opts);
   function handler (req, res, next) {
-    console.log(req.user, req.url);
+    console.log(req.session, req.url);
     proxy.web(req, res, {
       target: {
         host: proxy.target.host
