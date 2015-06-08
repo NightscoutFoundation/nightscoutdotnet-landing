@@ -156,8 +156,8 @@ function removePrefix (req, res, next) {
     console.log('should remove');
     req.url = req.url.split(/^\/local/g).pop( );
     console.log('should remove', req.url);
-    return next( );
   }
+  return next( );
 }
 
 // app.get('/', maybeProxy);
