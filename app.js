@@ -160,10 +160,10 @@ function removePrefix (req, res, next) {
   }
 }
 
-app.get('/', maybeProxy);
+// app.get('/', maybeProxy);
 app.all('*', maybeProxy);
-app.all('/local/*', removePrefix, noForgeries, setCSRFToken, unprotected);
-app.use(maybeProxy);
+app.all('/*', removePrefix, noForgeries, setCSRFToken, unprotected);
+// app.use(maybeProxy);
 
 //custom (friendly) error handler
 app.use(require('./views/http/index').http500);
