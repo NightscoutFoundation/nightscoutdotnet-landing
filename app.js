@@ -161,7 +161,7 @@ function removePrefix (req, res, next) {
 }
 
 // app.get('/', maybeProxy);
-app.all('*', maybeProxy);
+// app.all('*', maybeProxy);
 app.all('/*', removePrefix, noForgeries, setCSRFToken, unprotected);
 // app.use(maybeProxy);
 
