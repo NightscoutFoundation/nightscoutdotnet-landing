@@ -163,7 +163,6 @@ function removePrefix (req, res, next) {
 app.get('/', maybeProxy);
 app.all('*', maybeProxy);
 app.all('/local/*', removePrefix, noForgeries, setCSRFToken, unprotected);
-// app.all('/admin/*', noForgeries, setCSRFToken, unprotected);
 app.use(maybeProxy);
 
 //custom (friendly) error handler

@@ -51,6 +51,7 @@ exports = module.exports = function(app, passport) {
     return myProxy(req, res, next);
 
   }
+  console.log('base', app.config);
 
   // Neither of these variation seems to make much difference.
 
