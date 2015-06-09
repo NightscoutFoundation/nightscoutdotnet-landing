@@ -24,6 +24,7 @@ block body
       div.form-group(class!='<%- errfor.email ? "has-error" : "" %>')
         label Enter Your Email:
         input.form-control(type='text', name='email', value!='<%= email %>')
+        input.hidden(type='hidden', name='_csrf', value=csrfToken)
         span.help-block <%- errfor.email %>
       div.form-group
         button.btn.btn-primary.btn-signup(type='button') Create My Account

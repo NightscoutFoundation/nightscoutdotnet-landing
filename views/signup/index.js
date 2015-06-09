@@ -273,16 +273,18 @@ exports.signupGoogle = function(req, res, next) {
       return res.redirect('/signup/');
     }
 
+    var csrfToken = req.csrfToken();
     req.app.db.models.User.findOne({ 'google.id': info.profile.id }, function(err, user) {
       if (err) {
         return next(err);
       }
       if (!user) {
         req.session.socialProfile = info.profile;
-        res.render('signup/social', { email: info.profile.emails && info.profile.emails[0].value || '' });
+        res.render('signup/social', { csrfToken: csrfToken, email: info.profile.emails && info.profile.emails[0].value || '' });
       }
       else {
         res.render('signup/index', {
+          csrfToken: csrfToken,
           oauthMessage: 'We found a user linked to your Google account.',
           oauthTwitter: !!req.app.config.oauth.twitter.key,
           oauthGitHub: !!req.app.config.oauth.github.key,
