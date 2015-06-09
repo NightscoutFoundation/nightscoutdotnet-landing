@@ -60,13 +60,13 @@ exports.init = function(req, res, next){
 };
 
 exports.ensureFacebook = function (req, res, next) {
-  var key = req.app.config.oauth.facebook.key;
+  // var key = req.app.config.oauth.facebook.key;
   var secret = req.app.config.oauth.facebook.secret;
   req.facebook = require('fbgraph')
     .setAppSecret(secret)
     .setAccessToken(req.session.tokens.facebook);
   return next( );
-}
+};
 
 exports.groups = function(req, res, next){
   var workflow = req.app.utility.workflow(req, res);
