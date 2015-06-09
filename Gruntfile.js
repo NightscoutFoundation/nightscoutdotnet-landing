@@ -221,5 +221,6 @@ module.exports = function(grunt) {
 
   grunt.registerTask('default', ['copy:vendor', 'newer:uglify', 'newer:less', 'concurrent']);
   grunt.registerTask('build', ['copy:vendor', 'uglify', 'less']);
+  grunt.registerTask('heroku', ['build']);
   grunt.registerTask('lint', ['jshint']);
 };
