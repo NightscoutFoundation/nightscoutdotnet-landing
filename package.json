@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node app.js",
-    "postinstall": "npm install grunt grunt-contrib-uglify grunt-contrib-jshint grunt-contrib-clean grunt-contrib-less grunt-contrib-copy grunt-contrib-watch grunt-concurrent grunt-nodemon grunt-newer ; npm install -g grunt-cli bower ; bower install --allow-root ; grunt build",
+    "waspostinstall": "npm install grunt grunt-contrib-uglify grunt-contrib-jshint grunt-contrib-clean grunt-contrib-less grunt-contrib-copy grunt-contrib-watch grunt-concurrent grunt-nodemon grunt-newer ; npm install -g grunt-cli bower ; bower install --allow-root ; grunt build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
