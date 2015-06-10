@@ -72,13 +72,17 @@ app.use(passport.session());
 function csrfValue (req) {
 }
 function defaultValue(req) {
-  return (req.cookies && req.cookies._csrfTokenDryWall)
-    || (req.body && req.body._csrf)
+  var value = (req.cookies && req.cookies._csrfTokenDryWall);
+  console.log('get value for token', 'default', value);
+  if (!value)
+    value = value || (req.body && req.body._csrf)
     || (req.query && req.query._csrf)
     || (req.headers['csrf-token'])
     || (req.headers['xsrf-token'])
     || (req.headers['x-csrf-token'])
     || (req.headers['x-xsrf-token']);
+  console.log('get value for token', 'final', value);
+  return 
 }
 
 // helmet(app);
