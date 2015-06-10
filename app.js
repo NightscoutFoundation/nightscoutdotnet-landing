@@ -152,7 +152,7 @@ function maybeProxy (req, res, next) {
 var noForgeries = csrf({ cookie: { signed: true, key: '_csrfDryKey', value: defaultValue } });
 function setCSRFToken (req, res, next) {
   // This should be used separately in the body or header.
-  // res.cookie('_csrfTokenDryWall', req.csrfToken());
+  res.cookie('_csrfTokenDryWall', req.csrfToken());
   next();
 }
 function removePrefix (req, res, next) {
