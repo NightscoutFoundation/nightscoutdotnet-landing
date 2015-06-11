@@ -172,7 +172,7 @@ function do_nginx_rewrite (req, res, next) {
   }
   var uri = ORIGIN;
   if (req.session.do_proxy) {
-    console.log('redirecting internally to', uri);
+    console.log('redirecting internally', req.user, 'to', uri);
     res.header('X-Accel-Redirect', uri);
     res.send("")
     if (req.url.indexOf('/logout') === 0) {
