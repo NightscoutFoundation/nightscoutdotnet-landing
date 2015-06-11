@@ -188,6 +188,7 @@ function do_nginx_rewrite (req, res, next) {
       req.session.save( );
       return next( );
     }
+    return next( );
   }
 }
 
