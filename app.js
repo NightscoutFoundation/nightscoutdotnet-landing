@@ -164,6 +164,31 @@ function removePrefix (req, res, next) {
   return next( );
 }
 
+function do_nginx_rewrite (req, res, next) {
+  var ORIGIN = process.env['ORIGIN'];
+  if (!req.user || !req.isAuthenticated( )) {
+    console.log('SKIPPING PROXY sending to next');
+    return next( );
+  }
+  var uri = ORIGIN;
+  if (req.session.do_proxy) {
+    console.log('redirecting internally to', uri;)
+    res.header('X-Accel-Redirect', uri);
+    res.send("")
+    if (req.url.indexOf('/logout') === 0) {
+      req.session.do_proxy = false;
+      req.session.save( );
+      return next( );
+    }
+  } else {
+    if (req.url.indexOf('/nightscout') === 0) {
+      req.session.do_proxy = true;
+      req.session.save( );
+      return next( );
+    }
+  }
+}
+
 // app.get('/', maybeProxy);
 // app.all('*', maybeProxy);
 // app.all('/', removePrefix, noForgeries, setCSRFToken, unprotected);
