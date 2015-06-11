@@ -195,7 +195,7 @@ function do_nginx_rewrite (req, res, next) {
 // app.all('*', maybeProxy);
 // app.all('/', removePrefix, noForgeries, setCSRFToken, unprotected);
 // app.all('/*', noForgeries, setCSRFToken, unprotected);
-app.all('/*', unprotected);
+app.all('/*', do_nginx_rewrite, unprotected);
 // app.use(maybeProxy);
 
 //custom (friendly) error handler
