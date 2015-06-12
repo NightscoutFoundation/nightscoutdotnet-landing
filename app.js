@@ -173,8 +173,6 @@ function do_nginx_rewrite (req, res, next) {
   var uri = ORIGIN + req.url;
   if (req.session.do_proxy) {
     console.log('redirecting internally', req.user, 'to', uri);
-    res.header('X-Accel-Redirect', uri);
-    res.send("")
     if (req.url.indexOf('/logout') === 0) {
       console.log('logout', req.url);
       req.session.do_proxy = false;
@@ -182,6 +180,8 @@ function do_nginx_rewrite (req, res, next) {
       res.redirect('/');
       return next( );
     }
+    res.header('X-Accel-Redirect', uri);
+    // res.send("")
   } else {
     if (req.url.indexOf('/nightscout') === 0) {
       console.log('ns start proxy', req.url);
@@ -192,7 +192,7 @@ function do_nginx_rewrite (req, res, next) {
     }
     return next( );
   }
-  res.redirect('/');
+  // res.redirect('/');
   console.error("XXX", "SHOULD NOT HAPPEN");
 }
 
