@@ -180,9 +180,11 @@ function do_nginx_rewrite (req, res, next) {
       res.redirect('/');
       return next( );
     }
+    if (req.url.indexOf('/nightscout') === 0) {
+      return res.redirect('/');
+    }
     console.log('redirecting', 'to', uri);
     res.header('X-Accel-Redirect', uri);
-    // if (req.url.indexOf('/nightscout') === 0) { }
     // res.send("")
   } else {
     if (req.url.indexOf('/nightscout') === 0) {
