@@ -172,7 +172,7 @@ function do_nginx_rewrite (req, res, next) {
   }
   var uri = ORIGIN + req.url;
   if (req.session.do_proxy) {
-    console.log('redirecting internally', req.user, 'to', uri);
+    console.log('redirecting internally', req.user);
     if (req.url.indexOf('/logout') === 0) {
       console.log('logout', req.url);
       req.session.do_proxy = false;
@@ -180,6 +180,7 @@ function do_nginx_rewrite (req, res, next) {
       res.redirect('/');
       return next( );
     }
+    console.log('redirecting', 'to', uri);
     res.header('X-Accel-Redirect', uri);
     // res.send("")
   } else {
@@ -193,6 +194,7 @@ function do_nginx_rewrite (req, res, next) {
     return next( );
   }
   // res.redirect('/');
+  return next( );
   console.error("XXX", "SHOULD NOT HAPPEN");
 }
 
