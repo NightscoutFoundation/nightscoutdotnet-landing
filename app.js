@@ -179,6 +179,7 @@ function do_nginx_rewrite (req, res, next) {
       console.log('logout', req.url);
       req.session.do_proxy = false;
       req.session.save( );
+      req.redirect('/');
       return next( );
     }
   } else {
@@ -186,10 +187,12 @@ function do_nginx_rewrite (req, res, next) {
       console.log('ns start proxy', req.url);
       req.session.do_proxy = true;
       req.session.save( );
+      req.redirect('/');
       return next( );
     }
     return next( );
   }
+  console.error("XXX", "SHOULD NOT HAPPEN");
 }
 
 // app.get('/', maybeProxy);
