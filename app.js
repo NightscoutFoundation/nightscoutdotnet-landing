@@ -177,7 +177,8 @@ function do_nginx_rewrite (req, res, next) {
       console.log('logout', req.url);
       req.session.do_proxy = false;
       req.session.save( );
-      res.redirect('/');
+      res.redirect('/logout');
+      return;
       return next( );
     }
     if (req.url.indexOf('/nightscout') === 0) {
