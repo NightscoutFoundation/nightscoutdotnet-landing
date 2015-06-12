@@ -182,14 +182,15 @@ function do_nginx_rewrite (req, res, next) {
     }
     console.log('redirecting', 'to', uri);
     res.header('X-Accel-Redirect', uri);
+    // if (req.url.indexOf('/nightscout') === 0) { }
     // res.send("")
   } else {
     if (req.url.indexOf('/nightscout') === 0) {
       console.log('ns start proxy', req.url);
       req.session.do_proxy = true;
       req.session.save( );
-      res.redirect('/');
-      return next( );
+      return res.redirect('/');
+      // return next( );
     }
     return next( );
   }
