@@ -170,7 +170,7 @@ function do_nginx_rewrite (req, res, next) {
     console.log('SKIPPING PROXY sending to next');
     return next( );
   }
-  var uri = ORIGIN;
+  var uri = ORIGIN + req.url;
   if (req.session.do_proxy) {
     console.log('redirecting internally', req.user, 'to', uri);
     res.header('X-Accel-Redirect', uri);
