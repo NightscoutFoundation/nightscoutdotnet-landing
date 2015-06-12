@@ -192,6 +192,7 @@ function do_nginx_rewrite (req, res, next) {
     }
     return next( );
   }
+  res.redirect('/');
   console.error("XXX", "SHOULD NOT HAPPEN");
 }
 
