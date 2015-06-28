@@ -167,17 +167,25 @@ function removePrefix (req, res, next) {
   return next( );
 }
 
+// middleware leveraging nginx to re-proxy
+// this function intercepts almost all requests to nginx
 function do_nginx_rewrite (req, res, next) {
   var ORIGIN = process.env['ORIGIN'];
+  var original_host = req.headers['x-forwarded-host'] || req.hostname;
+  var prefix = original_host.split('-login.diabetes.watch').slice(0, -1).join("");
+  var scheme = req.headers['x-forwarded-proto'];
   if (!req.user || !req.isAuthenticated( )) {
     console.log('SKIPPING PROXY sending to next');
+    if (prefix) {
+      console.log('on invalid prefix', prefix);
+      var url = scheme + "://" + req.hostname + '/';
+      return res.redirect(url);
+    }
     return next( );
   }
-  var original_host = req.headers['x-forwarded-host'] || req.hostname;
-  var prefix = original_host.split('-login.diabetes.watch').slice(0, 1).join("");
   var uri = ORIGIN + '/' + encodeURIComponent(req.url.slice(1));
-  var scheme = req.headers['x-forwarded-proto'];
-  if (req.session.do_proxy) {
+  // if (req.session.do_proxy) {
+  if (prefix) {
     console.log("PROXY FOR HOST", original_host, prefix);
     console.log('redirecting internally', req.user);
     if (req.url.indexOf('/logout') === 0) {
