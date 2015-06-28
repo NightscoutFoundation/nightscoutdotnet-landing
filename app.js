@@ -46,19 +46,6 @@ app.use(require('method-override')());
 
 // app.use(bodyParser.json());
 // app.use(bodyParser.urlencoded({ extended: true }));
-
-app.use(function (req, res, next) {
-    console.log('URL', req.url);
-  if (req.body)
-    console.log('body', req.body._csrf);
-  if (req.query)
-    console.log('query', req.query._csrf);
-  console.log('COOKIE', req.session.cookie);
-  console.log('COOKIE', req.cookies);
-  console.log('headers', JSON.stringify(req.headers, 0, 2));
-  next( );
-});
-
 app.use(cookieParser(config.cryptoKey));
 app.use(session({
   resave: true,
@@ -71,6 +58,19 @@ app.use(session({
 }));
 app.use(passport.initialize());
 app.use(passport.session());
+
+
+app.use(function (req, res, next) {
+    console.log('URL', req.url);
+  if (req.body)
+    console.log('body', req.body._csrf);
+  if (req.query)
+    console.log('query', req.query._csrf);
+  console.log('COOKIE', req.session.cookie);
+  console.log('COOKIE', req.cookies);
+  console.log('headers', JSON.stringify(req.headers, 0, 2));
+  next( );
+});
 
 function csrfValue (req) {
 }
