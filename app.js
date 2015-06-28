@@ -185,6 +185,11 @@ function do_nginx_rewrite (req, res, next) {
     }
     return next( );
   }
+  // lookup in db, resolve permissions, etc
+  // hardcode for simple POC
+  if (prefix == 'first' && req.user.username == 'first') {
+    ORIGIN = '/x-accel-redirect/' + 'ns-dev2.cbrese.com';
+  }
   var uri = ORIGIN + '/' + encodeURIComponent(req.url.slice(1));
   // if (req.session.do_proxy) {
   if (prefix) {
