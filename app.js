@@ -63,7 +63,7 @@ app.use(session({
   resave: true,
   saveUninitialized: true,
   secret: config.cryptoKey,
-  cookie: { path: '/', domain: '.diabetes.watch' },
+  domain: '.diabetes.watch',
   name: 'drywall.connect.sid',
   store: new mongoStore({ url: config.mongodb.uri })
 }));
