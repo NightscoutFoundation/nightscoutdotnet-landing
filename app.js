@@ -180,7 +180,8 @@ function do_nginx_rewrite (req, res, next) {
       console.log('on invalid prefix', prefix);
       var url = scheme + "://" + req.hostname;
       console.log('sending', url);
-      return res.redirect(url).end( );
+      res.redirect(url);
+      return res.end( );
     }
     return next( );
   }
@@ -201,7 +202,8 @@ function do_nginx_rewrite (req, res, next) {
       return res.redirect('/');
     }
     console.log('redirecting', 'to', uri);
-    res.header('X-Accel-Redirect', uri).end( );
+    res.header('X-Accel-Redirect', uri)
+    res.end( );
     // res.send("")
   } else {
     if (req.url.indexOf('/nightscout') === 0) {
@@ -209,7 +211,8 @@ function do_nginx_rewrite (req, res, next) {
       req.session.do_proxy = true;
       req.session.save( );
       var url = scheme + "://" + req.user.username + '-' + req.hostname + '/';
-      return res.redirect(url).end( );
+      res.redirect(url);
+      return res.end( );
       // return next( );
     }
     return next( );
