@@ -63,6 +63,7 @@ app.use(session({
   resave: true,
   saveUninitialized: true,
   secret: config.cryptoKey,
+  cookie: { domain: '.diabetes.watch' },
   name: 'drywall.connect.sid',
   store: new mongoStore({ url: config.mongodb.uri })
 }));
@@ -170,11 +171,12 @@ function do_nginx_rewrite (req, res, next) {
     console.log('SKIPPING PROXY sending to next');
     return next( );
   }
-  var uri = ORIGIN + '/' + encodeURIComponent(req.url.slice(1));
   var original_host = req.headers['x-forwarded-host'] || req.hostname;
+  var prefix = original_host.split('-login.diabetes.watch').slice(0, 1).join("");
+  var uri = ORIGIN + '/' + encodeURIComponent(req.url.slice(1));
   var scheme = req.headers['x-forwarded-proto'];
   if (req.session.do_proxy) {
-    console.log("PROXY FOR HOST", original_host);
+    console.log("PROXY FOR HOST", original_host, prefix);
     console.log('redirecting internally', req.user);
     if (req.url.indexOf('/logout') === 0) {
       console.log('logout', req.url);
