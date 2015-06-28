@@ -179,6 +179,7 @@ function do_nginx_rewrite (req, res, next) {
     if (prefix) {
       console.log('on invalid prefix', prefix);
       var url = scheme + "://" + req.hostname + '/';
+      console.log('sending', url);
       return res.redirect(url);
     }
     return next( );
