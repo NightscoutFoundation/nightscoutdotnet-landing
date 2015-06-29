@@ -140,7 +140,7 @@ exports.connectFacebook = function(req, res, next){
 };
 
 exports.connectGoogle = function(req, res, next){
-  req._passport.instance.authenticate('google', { callbackURL: '/account/settings/google/callback/' }, function(err, user, info) {
+  req._passport.instance.authenticate('google', { callbackURL: req.app.config.oauth_base + '/account/settings/google/callback/' }, function(err, user, info) {
     if (!info || !info.profile) {
       return res.redirect('/account/settings/');
     }
@@ -167,7 +167,7 @@ exports.connectGoogle = function(req, res, next){
 };
 
 exports.connectTumblr = function(req, res, next){
-  req._passport.instance.authenticate('tumblr', { callbackURL: '/account/settings/tumblr/callback/' }, function(err, user, info) {
+  req._passport.instance.authenticate('tumblr', { callbackURL: req.app.config.oauth_base + '/account/settings/tumblr/callback/' }, function(err, user, info) {
     if (!info || !info.profile) {
       return res.redirect('/account/settings/');
     }

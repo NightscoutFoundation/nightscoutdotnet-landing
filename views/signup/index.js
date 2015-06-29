@@ -240,7 +240,7 @@ exports.signupGitHub = function(req, res, next) {
 };
 
 exports.signupFacebook = function(req, res, next) {
-  req._passport.instance.authenticate('facebook', { callbackURL: '/signup/facebook/callback/' }, function(err, user, info) {
+  req._passport.instance.authenticate('facebook', { callbackURL: req.app.config.oauth_base + '/signup/facebook/callback/' }, function(err, user, info) {
     if (!info || !info.profile) {
       return res.redirect('/signup/');
     }
@@ -268,7 +268,7 @@ exports.signupFacebook = function(req, res, next) {
 };
 
 exports.signupGoogle = function(req, res, next) {
-  req._passport.instance.authenticate('google', { callbackURL: '/signup/google/callback/' }, function(err, user, info) {
+  req._passport.instance.authenticate('google', { callbackURL: req.app.config.oauth_base + '/signup/google/callback/' }, function(err, user, info) {
     if (!info || !info.profile) {
       return res.redirect('/signup/');
     }
@@ -296,7 +296,7 @@ exports.signupGoogle = function(req, res, next) {
 };
 
 exports.signupTumblr = function(req, res, next) {
-  req._passport.instance.authenticate('tumblr', { callbackURL: '/signup/tumblr/callback/' }, function(err, user, info) {
+  req._passport.instance.authenticate('tumblr', { callbackURL: req.app.config.oauth_base + '/signup/tumblr/callback/' }, function(err, user, info) {
     if (!info || !info.profile) {
       return res.redirect('/signup/');
     }
