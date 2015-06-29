@@ -40,6 +40,9 @@ block body
           div.well.stat
             div.stat-value.hour-of-day --
             div.stat-label Hour of Day
+      div.row
+        div.well.stat
+          iframe(src="//#{ username }-login.diabetes.watch/clock.html")
     div.col-sm-6.special
       div.page-header
         h1 Login with Nightscout
@@ -49,7 +52,7 @@ block body
         h3 Groups
         h3 Schedules
       i.fa.fa-dashboard.super-awesome
-      iframe(src="//#{ username }-login.diabetes.watch/clock.html")
+      img(src="//#{ username }-login.diabetes.watch/api/v1/status.svg")
 
       h2
         a(href="//#{ username }-login.diabetes.watch/") Nightscout
