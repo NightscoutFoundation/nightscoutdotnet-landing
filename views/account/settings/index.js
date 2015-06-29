@@ -112,7 +112,8 @@ exports.connectGitHub = function(req, res, next){
 };
 
 exports.connectFacebook = function(req, res, next){
-  req._passport.instance.authenticate('facebook', { callbackURL: '/account/settings/facebook/callback/' }, function(err, user, info) {
+  req._passport.instance.authenticate('facebook', { callbackURL: req.app.config.oauth_base + '/account/settings/facebook/callback/' }, function(err, user, info) {
+    console.log('FACEBOOK', arguments);
     if (!info || !info.profile) {
       return res.redirect('/account/settings/');
     }
