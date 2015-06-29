@@ -44,6 +44,7 @@ exports.smtp = {
   }
 };
 exports.SCRIPT_NAME = process.env.SCRIPT_NAME || '';
+exports.oauth_base = process.env.OAUTH_BASE;
 exports.oauth = {
   twitter: {
     key: process.env.TWITTER_OAUTH_KEY || '',
