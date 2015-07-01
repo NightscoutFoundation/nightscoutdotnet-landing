@@ -189,7 +189,9 @@ function do_nginx_rewrite (req, res, next) {
   // hardcode for simple POC
   var allowedFirstUsers = [null, 'bewest', 'first'];
   if (prefix == 'first' && allowedFirstUsers.indexOf(req.user.username)) {
-    // ORIGIN = '/x-accel-redirect/' + 'ns-dev2.cbrese.com';
+    ORIGIN = '/x-accel-redirect/' + 'ns-dev2.cbrese.com';
+  }
+  if (req.user.username == 'bewest' && prefix == 'demo') {
     ORIGIN = '/x-accel-redirect/' + 'p5001-backends.diabetes.watch';
   }
   var uri = ORIGIN + '/' + encodeURIComponent(req.url.slice(1));
