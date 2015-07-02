@@ -192,7 +192,7 @@ function do_nginx_rewrite (req, res, next) {
     ORIGIN = '/x-accel-redirect/' + 'ns-dev2.cbrese.com';
   }
   if (req.user.username == 'bewest' && prefix == 'demo') {
-    ORIGIN = '/x-accel-redirectssl/' + 'p5001-backends.diabetes.watch:8888';
+    ORIGIN = '/x-accel-redirectssl/' + 'p5001-backends.diabetes.watch';
   }
   var uri = ORIGIN + '/' + encodeURIComponent(req.url.slice(1));
   // if (req.session.do_proxy) {
