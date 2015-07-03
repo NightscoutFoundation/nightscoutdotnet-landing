@@ -197,6 +197,14 @@ function do_nginx_rewrite (req, res, next) {
   var uri = ORIGIN + '/' + encodeURIComponent(req.url.slice(1));
   // if (req.session.do_proxy) {
   if (prefix) {
+    console.log("SITES FOR prefix", prefix, req.user.username, req.user.roles.account.sites);
+    for (var x in req.user.roles.account.sites) {
+      var site = req.user.roles.account.sites[x];
+      if (site.name == prefix) {
+        uri = '/x-accel-redirectssl/u-' + prefix + '-backends.diabetes.watch/' + encodeURIComponent(req.url.slice(1));
+        break;
+      }
+    }
     console.log("PROXY FOR HOST", original_host, prefix);
     console.log('redirecting internally', req.user);
     if (req.url.indexOf('/logout') === 0) {
