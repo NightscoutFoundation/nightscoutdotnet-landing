@@ -52,7 +52,7 @@ app.use(session({
   saveUninitialized: true,
   secret: config.cryptoKey,
   // cookie: { path: '/', domain: '.diabetes.watch', maxAge: 1000 * 60 * 60 * 24 * 30 },
-  cookie: { domain: '.diabetes.watch' },
+  cookie: { domain: config.cookie.domain },
   name: 'drywall.connect.sid',
   store: new mongoStore({ url: config.mongodb.uri })
 }));
@@ -63,11 +63,11 @@ app.use(passport.session());
 app.use(function (req, res, next) {
     console.log('URL', req.url);
   if (req.body)
-    console.log('body', req.body._csrf);
+    // console.log('body', req.body._csrf);
   if (req.query)
     console.log('query', req.query._csrf);
-  console.log('COOKIE', req.session.cookie);
-  console.log('COOKIE', req.cookies);
+  // console.log('COOKIE', req.session.cookie);
+  // console.log('COOKIE', req.cookies);
   console.log('headers', JSON.stringify(req.headers, 0, 2));
   next( );
 });
@@ -92,8 +92,8 @@ function defaultValue(req) {
 
 //response locals
 app.use(function(req, res, next) {
-  console.log('req COOKIE', req.cookies);
-  console.log('req SESSION', req.session);
+  // console.log('req COOKIE', req.cookies);
+  // console.log('req SESSION', req.session);
   res.locals.user = {};
   res.locals.user.defaultReturnUrl = req.user && req.user.defaultReturnUrl();
   res.locals.user.username = req.user && req.user.username;

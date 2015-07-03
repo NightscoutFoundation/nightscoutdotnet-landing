@@ -28,6 +28,7 @@ exports = module.exports = function(app, mongoose) {
     },
     statusLog: [mongoose.modelSchemas.StatusLog],
     notes: [mongoose.modelSchemas.Note],
+    sites: [mongoose.modelSchemas.Site],
     userCreated: {
       id: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
       name: { type: String, default: '' },

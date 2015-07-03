@@ -1,0 +1,23 @@
+
+extends ../../../layouts/account
+
+block head
+  title My Sites
+
+block feet
+  script(src='/views/account/sites/index.min.js?#{cacheBreaker}')
+
+block body
+  div.row
+    div.col-xs-12
+      div.page-header
+        h1 Account Settings
+  div.row
+    div.col-sm-9
+      div#details
+      div#create
+        form#create_site(method="POST")
+          .form-group
+            label Name
+              input.form-control(type="text", name="name")
+          button.btn.btn-default(type="submit") Create

@@ -28,7 +28,8 @@ exports.loginAttempts = {
   logExpiration: '60m'
 };
 exports.proxy = {
-  ORIGIN: process.env['ORIGIN']
+  ORIGIN: process.env['ORIGIN'],
+  api: process.env['MULTIENV_API'] || 'http://localhost:3434'
 }
 exports.requireAccountVerification = false;
 exports.smtp = {
@@ -66,6 +67,13 @@ exports.oauth = {
     key: process.env.TUMBLR_OAUTH_KEY || '',
     secret: process.env.TUMBLR_OAUTH_SECRET || ''
   }
+};
+exports.hosted = {
+  prefix: process.env.HOSTED_MONGO_PREFIX || 'hosted_',
+  uri: process.env.HOSTED_MONGO_URI || ('mongodb://' + exports.mongodb.uri)
+};
+exports.cookie = {
+  domain: process.env.COOKIE_DOMAIN || ''
 };
 if (!module.parent) {
   // configure( );

@@ -185,6 +185,11 @@ exports = module.exports = function(app, passport) {
   app.put('/account/settings/identity/', require('./views/account/settings/index').identity);
   app.put('/account/settings/password/', require('./views/account/settings/index').password);
 
+  // account > sites
+  var sites = require('./views/account/sites/index');
+  app.get('/account/sites/', sites.init);
+  app.post('/account/sites/', sites.create);
+
   // account > groups
   var groups = require('./views/account/groups/index');
   app.all('/account/groups*', groups.ensureFacebook);
