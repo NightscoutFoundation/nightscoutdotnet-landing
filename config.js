@@ -70,7 +70,7 @@ exports.oauth = {
 };
 exports.hosted = {
   prefix: process.env.HOSTED_MONGO_PREFIX || 'hosted_',
-  uri: process.env.HOSTED_MONGO_URI || exports.mongodb.uri)
+  uri: process.env.HOSTED_MONGO_URI || exports.mongodb.uri
 };
 exports.cookie = {
   domain: process.env.COOKIE_DOMAIN || ''
