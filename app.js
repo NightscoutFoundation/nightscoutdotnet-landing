@@ -202,6 +202,7 @@ function do_nginx_rewrite (req, res, next) {
       var site = req.user.roles.account.sites[x];
       if (site.name == prefix) {
         uri = '/x-accel-redirectssl/u-' + prefix + '-backends.diabetes.watch/' + encodeURIComponent(req.url.slice(1));
+        console.log('MATCHING SITE', prefix, uri, site);
         break;
       }
     }
@@ -244,8 +245,9 @@ function do_nginx_rewrite (req, res, next) {
 // app.all('/', removePrefix, noForgeries, setCSRFToken, unprotected);
 // app.all('/*', noForgeries, setCSRFToken, unprotected);
 function fetches_sites (req, res, next) {
+  req.sites = [ ];
   if (req.user &&  req.isAuthenticated( )) {
-    req.user.roles.account.populate('sites,', function (err, account) {
+    req.user.roles.account.populate('sites', function (err, account) {
       console.log('account', account, account.sites);
       req.sites = account.sites;
       next( );
