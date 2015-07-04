@@ -243,7 +243,19 @@ function do_nginx_rewrite (req, res, next) {
 // app.all('*', maybeProxy);
 // app.all('/', removePrefix, noForgeries, setCSRFToken, unprotected);
 // app.all('/*', noForgeries, setCSRFToken, unprotected);
-app.all('/*', do_nginx_rewrite, unprotected);
+function fetches_sites (req, res, next) {
+  if (req.user &&  req.isAuthenticated( )) {
+    req.user.roles.account.populate('sites,', function (err, account) {
+      console.log('account', account, account.sites);
+      req.sites = account.sites;
+      next( );
+    });
+    return;
+  } else {
+    next( );
+  }
+}
+app.all('/*', fetches_sites, do_nginx_rewrite, unprotected);
 // app.use(maybeProxy);
 
 //custom (friendly) error handler
