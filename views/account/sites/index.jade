@@ -3,6 +3,13 @@ extends ../../../layouts/account
 
 block head
   title My Sites
+  //- link(rel='stylesheet', href='/views/account/sites/index.min.css?#{cacheBreaker}')
+  style(type='text/css')
+    :css
+      .template-site {
+        display: none;
+      }
+
 
 block feet
   //- script(src='/views/account/sites/index.min.js?#{cacheBreaker}')
