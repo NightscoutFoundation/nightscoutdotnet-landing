@@ -5,7 +5,9 @@ block head
   title My Sites
 
 block feet
-  script(src='/views/account/sites/index.min.js?#{cacheBreaker}')
+  //- script(src='/views/account/sites/index.min.js?#{cacheBreaker}')
+  script(src='/vendor/d3/d3.min.js')
+  script(src='/views/account/sites/index.js?#{cacheBreaker}')
 
 block body
   div.row
@@ -14,6 +16,25 @@ block body
         h1 Account Settings
   div.row
     div.col-sm-9
+      table
+        thead
+          tr
+            th Name
+            th Details
+            th
+        tbody.sites.list#site-list
+        tbody.sites.skeleton.template-site
+          tr.site-row
+            td
+              input.v.name
+            td
+              span.v.name
+              span.v.status
+              img.v.status
+            td
+              a.v.view
+                i.fa.fa.anchor View
+
       div#details
       div#create
         form#create_site(method="POST")
@@ -21,3 +42,4 @@ block body
             label Name
               input.form-control(type="text", name="name")
           button.btn.btn-default(type="submit") Create
+            i.fa.fa-plus

@@ -41,6 +41,10 @@ module.exports = function(grunt) {
           {
             expand: true, cwd: 'bower_components/underscore/',
             src: ['underscore.js'], dest: 'public/vendor/underscore/'
+          },
+          {
+            expand: true, cwd: 'bower_components/d3/',
+            src: ['d3.min.js'], dest: 'public/vendor/d3/'
           }
         ]
       }
