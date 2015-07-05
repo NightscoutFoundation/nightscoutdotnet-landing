@@ -35,10 +35,11 @@ exports.create = function(req, res, next){
   // console.log("config", req.app.config);
   console.log("config", req.app.config.hosted.uri);
   console.log("config", req.app.config.hosted.prefix);
-  var prefix = req.app.config.hosted.prefix + req.body.name + '_internal_';
+  var internal_name = req.body.name;
+  var prefix = req.app.config.hosted.prefix + internal_name + '_internal_';
   var inst = {
     mongo: req.app.config.hosted.uri,
-    internal_name: req.body.name,
+    internal_name: internal_name,
     MONGO_COLLECTION: prefix + 'entries',
     MONGO_SETTINGS_COLLECTION: prefix + 'settings',
     MONGO_TREATMENTS_COLLECTION: prefix + 'treatments',
@@ -64,6 +65,12 @@ exports.create = function(req, res, next){
       response: body
     };
 
+    /*
+    function createSite (fieldsToSet, cb) {
+      
+    }
+    */
+    // req.user.createSite(fieldsToSet,
     req.app.db.models.Site.create(fieldsToSet, function (err, site) {
       req.site = site;
       req.user.roles.account.sites.push(site);
