@@ -15,6 +15,7 @@
       var base = '//' + item.name + '-login.diabetes.watch';
       clone.find('IMG.status').attr('src', base + '/api/v1/status.png');
       clone.find('A.v.view').attr('href', base + '/');
+      clone.find('A.v.clock-mode').attr('href', base + '/clock.html');
       return clone;
     }
 

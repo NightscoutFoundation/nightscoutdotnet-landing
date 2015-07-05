@@ -20,20 +20,23 @@ block body
         thead
           tr
             th Name
-            th Details
+            th Status
             th
         tbody.sites.list#site-list
         tbody.sites.skeleton.template-site
           tr.site-row
             td
-              input.v.name
+              //- input.v.name
+              a.v.view
+                span.v.name
             td
-              span.v.name
               span.v.status
               img.v.status
             td
-              a.v.view
-                i.fa.fa.anchor View
+              a.v.view.btn
+                i.fa.fa-anchor
+                | View
+              a.btn.v.clock-mode Clock mode
 
       div#details
       div#create
