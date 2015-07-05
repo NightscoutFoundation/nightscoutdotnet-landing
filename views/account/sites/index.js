@@ -60,7 +60,8 @@ exports.create = function(req, res, next){
     }
 
     var fieldsToSet = {
-      name: body.internal_name,
+      display: req.body.name,
+      internal_name: body.internal_name,
       account: { id: req.user.roles.account._id },
       response: body
     };
@@ -71,9 +72,15 @@ exports.create = function(req, res, next){
     }
     */
     // req.user.createSite(fieldsToSet,
-    req.app.db.models.Site.create(fieldsToSet, function (err, site) {
+    var q = {
+      name: fieldsToSet.display
+    , account: { id: req.user.roles.account._id }
+    };
+    req.app.db.models.Site.findOneAndUpdate(q, fieldsToSet, {upsert: true}, function (err, site) {
+    // req.app.db.models.Site.create(fieldsToSet, function (err, site) {
       req.site = site;
-      req.user.roles.account.sites.push(site);
+      // req.user.roles.account.sites.push(site);
+      req.user.roles.account.sites.addToSet(site);
       req.user.roles.account.save( );
       
       // renderSites(req, res, next, '');
