@@ -30,12 +30,12 @@ exports.list = function list (req, res, next) {
   // req.app.db.models.Site.find
 }
 
-exports.create = function(req, res, next){
+exports.create = function(req, res, next) {
   console.log("GOT NEW SITE REQUEST", req.body);
   // console.log("config", req.app.config);
   console.log("config", req.app.config.hosted.uri);
   console.log("config", req.app.config.hosted.prefix);
-  var internal_name = req.body.name;
+  var internal_name = req.body.name + '.' + req.user.roles.account._id;
   var prefix = req.app.config.hosted.prefix + internal_name + '_internal_';
   var inst = {
     mongo: req.app.config.hosted.uri,
@@ -67,9 +67,7 @@ exports.create = function(req, res, next){
     };
 
     /*
-    function createSite (fieldsToSet, cb) {
-      
-    }
+    function createSite (fieldsToSet, cb) { }
     */
     // req.user.createSite(fieldsToSet,
     var q = {
@@ -77,7 +75,6 @@ exports.create = function(req, res, next){
     , account: fieldsToSet.account
     };
     req.app.db.models.Site.findOneAndUpdate(q, fieldsToSet, {upsert: true}, function (err, site) {
-    // req.app.db.models.Site.create(fieldsToSet, function (err, site) {
       req.site = site;
       // req.user.roles.account.sites.push(site);
       req.user.roles.account.sites.addToSet(site);

@@ -3,6 +3,7 @@
 exports = module.exports = function(app, mongoose) {
   var siteSchema = new mongoose.Schema({
     name: { type: String, default: '' },
+    internal_name: { type: String, default: '' },
     origin: { type: String, default: '' },
     apikey: { type: String, default: '' },
     internal: { type: Boolean, default: true },
