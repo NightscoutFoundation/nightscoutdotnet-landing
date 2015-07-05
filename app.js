@@ -201,7 +201,7 @@ function do_nginx_rewrite (req, res, next) {
     for (var x in req.user.roles.account.sites) {
       var site = req.user.roles.account.sites[x];
       if (site.name == prefix) {
-        console.log('changing prefix', prefx, site.internal_name);
+        console.log('changing prefix', prefix, site.internal_name);
         prefix = site.internal_name;
         uri = '/x-accel-redirectssl/u-' + prefix + '-backends.diabetes.watch/' + encodeURIComponent(req.url.slice(1));
         console.log('MATCHING SITE', prefix, uri, site);
