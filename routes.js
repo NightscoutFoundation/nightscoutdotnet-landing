@@ -190,6 +190,7 @@ exports = module.exports = function(app, passport) {
   app.get('/account/sites/', sites.init);
   app.post('/account/sites/', sites.create);
   app.get('/account/sites/list.json/', sites.list);
+  app.delete('/account/sites/:name', sites.remove);
 
   // account > groups
   var groups = require('./views/account/groups/index');

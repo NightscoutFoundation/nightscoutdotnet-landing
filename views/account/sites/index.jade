@@ -10,6 +10,10 @@ block head
         display: none;
       }
 
+      #create INPUT.site-name {
+        text-align: right;
+      }
+
 
 block feet
   //- script(src='/views/account/sites/index.min.js?#{cacheBreaker}')
@@ -35,7 +39,9 @@ block body
             td
               //- input.v.name
               a.v.view
-                span.v.name
+                tt
+                  span.v.name
+                  | -login.diabetes.watch
             td
               span.v.status
               img.v.status
@@ -44,12 +50,21 @@ block body
                 i.fa.fa-anchor
                 | View
               a.btn.v.clock-mode Clock mode
+              button.delete-site.btn.btn-danger.btn-sm
+                i.fa.fa-trash-o
 
+  div.row
+    div.col-sm-12
       div#details
       div#create
+        h2 Create a new site
         form#create_site(method="POST")
           .form-group
-            label Name
-              input.form-control(type="text", name="name")
-          button.btn.btn-default(type="submit") Create
+            label
+              div Name 
+              tt
+                input.control.site-name(type="text", name="name")
+                | -login.diabetes.watch
+          button.btn.btn-default(type="submit")
             i.fa.fa-plus
+            |  Add new site

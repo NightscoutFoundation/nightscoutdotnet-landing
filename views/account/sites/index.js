@@ -30,6 +30,50 @@ exports.list = function list (req, res, next) {
   // req.app.db.models.Site.find
 }
 
+exports.remove = function(req, res, next) {
+  var name = req.params.name;
+  var account_id = req.user.roles.account._id;
+  // var site = req.sites.filter(function (f) { return f.name == name && req.user.roles.account._id == f.account.id; });
+  var site = req.sites.filter(function (f) { 
+    return (f.name == name && f.account.id.toString( ) == account_id.toString( ));
+  }).pop( );
+  console.log("REMOVE XX", site);
+  if (site.name != name) {
+    throw "bad";
+  }
+  var api = req.app.config.proxy.api;
+  var delete_url = api + '/environs/' + site.internal_name;
+  var q = {
+    name: name
+  , account: { id: req.user.roles.account._id },
+  };
+  console.log('removing', name, 'from backend', delete_url);
+  request.del(delete_url, function done (err, result, body) {
+    console.log('removed from backends', result.statusCode, body);
+    // req.user.roles.account.sites.pull(q);
+    console.log('begin sites for account', req.user.roles.account.sites.length);
+    req.user.roles.account.sites = req.sites.filter(function (c) {
+      console.log('considering removing', c.name, name);
+      return c.name.toString( ) != name;
+    });
+    req.user.roles.account.update(req.user.roles.account, function (err, saved) {
+      console.log('saved account', err, saved);
+      req.app.db.models.Site.remove(q, function (err, site) {
+          // req.app.db.models.Site.findOneAndRemove(q, function (err, site) { });
+          console.log('removed from db', 'query', q, 'err', err, 'site??', site);
+          /*
+          req.user.roles.account.update(function (err) { });
+          */
+          console.log('sites for account', req.user.roles.account.sites.length);
+          res.status(204).send("").end( );
+
+      });
+    });
+
+    /* */
+  });
+}
+
 exports.create = function(req, res, next) {
   console.log("GOT NEW SITE REQUEST", req.body);
   // console.log("config", req.app.config);

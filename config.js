@@ -16,7 +16,7 @@ function configure ( ) {
 */
 exports.port = process.env.PORT || 3000;
 exports.mongodb = {
-  uri: process.env.MONGOLAB_URI || process.env.MONGOHQ_URL || 'localhost/drywall'
+  uri: process.env.MONGOLAB_URI || process.env.MONGOHQ_URL || 'mongodb://localhost/drywall'
 };
 exports.companyName = process.env.COMPANY_NAME || 'Acme, Inc.';
 exports.projectName = process.env.PROJECT_NAME || 'Drywall';
