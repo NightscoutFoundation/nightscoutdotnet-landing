@@ -169,6 +169,40 @@ function removePrefix (req, res, next) {
 
 // middleware leveraging nginx to re-proxy
 // this function intercepts almost all requests to nginx
+function do_uploader_rewrite (req, res, next) {
+  var original_host = req.headers['x-forwarded-host'] || req.hostname;
+  var prefix = original_host.split('-u.diabetes.watch').slice(0, -1).join("");
+  var scheme = req.headers['x-forwarded-proto'];
+  var api_secret = req.headers['api_secret'];
+  if (!req.user || !req.isAuthenticated( )) {
+    console.log('SKIPPING PROXY sending to next');
+    if (prefix) {
+      console.log('on candidate prefix', prefix, api_secret, original_host);
+      if (api_secret && api_secret.length > 12) {
+        var url = scheme + "://" + req.hostname;
+        var q = {
+          apikey: api_secret
+        , uploader_prefix: prefix
+        };
+        req.app.db.models.Site.findOne(q, function (err, site) {
+          prefix = site.internal_name;
+          url = '/x-accel-redirectssl/u-' + prefix + '-backends.diabetes.watch/' + encodeURIComponent(req.url.slice(1));
+          res.header('API_SECRET', api_secret);
+          res.header('X-Accel-Redirect', url);
+          console.log('MATCHING SITE', prefix, url, site);
+          res.end( );
+          return;
+        });
+      }
+      return;
+      // res.send("")
+      // res.redirect(url);
+      // return res.end( );
+    }
+  }
+  return next( );
+}
+
 function do_nginx_rewrite (req, res, next) {
   var ORIGIN = process.env['ORIGIN'];
   var original_host = req.headers['x-forwarded-host'] || req.hostname;
@@ -259,7 +293,7 @@ function fetches_sites (req, res, next) {
     next( );
   }
 }
-app.all('/*', fetches_sites, do_nginx_rewrite, unprotected);
+app.all('/*', fetches_sites, do_uploader_rewrite, do_nginx_rewrite, unprotected);
 // app.use(maybeProxy);
 
 //custom (friendly) error handler

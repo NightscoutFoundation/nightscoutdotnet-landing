@@ -1,6 +1,7 @@
 'use strict';
 
 var request = require('request');
+var crypto = require('crypto');
 var renderSites = function(req, res, next) {
 
   req.user.roles.account.populate('sites', 
@@ -93,6 +94,9 @@ exports.create = function(req, res, next) {
     // DISPLAY_UNITS
     // ENABLE
   };
+  var api_secret = crypto.randomBytes(256).slice(0, 20).toString('hex');
+  var uploader_prefix = crypto.randomBytes(12).toString('hex');
+  inst.API_SECRET = api_secret;
   var api = req.app.config.proxy.api;
   var creator_url = api + '/environs/' + inst.internal_name;
   console.log('sending', creator_url, inst);
@@ -107,6 +111,8 @@ exports.create = function(req, res, next) {
       name: req.body.name,
       internal_name: body.internal_name,
       account: { id: req.user.roles.account._id },
+      apikey: body.API_SECRET,
+      uploader_prefix: uploader_prefix,
       response: body
     };
 
