@@ -173,7 +173,7 @@ function do_uploader_rewrite (req, res, next) {
   var original_host = req.headers['x-forwarded-host'] || req.hostname;
   var prefix = original_host.split('-u.diabetes.watch').slice(0, -1).join("");
   var scheme = req.headers['x-forwarded-proto'];
-  var api_secret = req.headers['api_secret'];
+  var api_secret = req.headers['api-secret'];
   if (!req.user || !req.isAuthenticated( )) {
     console.log('CONSIDERING UPLOADER', prefix);
     if (prefix) {
