@@ -175,7 +175,7 @@ function do_uploader_rewrite (req, res, next) {
   var scheme = req.headers['x-forwarded-proto'];
   var api_secret = req.headers['api_secret'];
   if (!req.user || !req.isAuthenticated( )) {
-    console.log('SKIPPING PROXY sending to next');
+    console.log('CONSIDERING UPLOADER', prefix);
     if (prefix) {
       console.log('on candidate prefix', prefix, api_secret, original_host);
       if (api_secret && api_secret.length > 12) {
@@ -187,9 +187,9 @@ function do_uploader_rewrite (req, res, next) {
         req.app.db.models.Site.findOne(q, function (err, site) {
           prefix = site.internal_name;
           url = '/x-accel-redirectssl/u-' + prefix + '-backends.diabetes.watch/' + encodeURIComponent(req.url.slice(1));
+          console.log('MATCHING SITE', prefix, url, err, site);
           res.header('API_SECRET', api_secret);
           res.header('X-Accel-Redirect', url);
-          console.log('MATCHING SITE', prefix, url, site);
           res.end( );
           return;
         });
