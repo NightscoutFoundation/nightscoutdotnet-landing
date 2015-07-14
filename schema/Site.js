@@ -24,6 +24,8 @@ exports = module.exports = function(app, mongoose) {
   siteSchema.index({ name: 1 });
   siteSchema.index({ origin: 1 });
   siteSchema.index({ created_at: -1 });
+  siteSchema.index({ apikey: -1 });
+  siteSchema.index({ uploader_prefix: -1 });
 
   app.db.model('Site', siteSchema);
 };

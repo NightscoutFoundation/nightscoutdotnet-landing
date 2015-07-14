@@ -184,11 +184,12 @@ function do_uploader_rewrite (req, res, next) {
           apikey: api_secret
         , uploader_prefix: prefix
         };
+        console.log('find site with', q);
         req.app.db.models.Site.findOne(q, function (err, site) {
           console.log('MATCHING SITE', prefix, err, site);
           prefix = site.internal_name;
           url = '/x-accel-redirectssl/u-' + prefix + '-backends.diabetes.watch/' + encodeURIComponent(req.url.slice(1));
-          res.header('API_SECRET', api_secret);
+          res.header('API-SECRET', api_secret);
           res.header('X-Accel-Redirect', url);
           res.end( );
           return;
