@@ -107,11 +107,15 @@ exports.create = function(req, res, next) {
       next(err);
     }
 
+    var shasum = crypto.createHash('sha1');
+    shasum.update(body.API_SECRET);
+    var api_key = shasum.digest('hex');
     var fieldsToSet = {
       name: req.body.name,
       internal_name: body.internal_name,
       account: { id: req.user.roles.account._id },
-      apikey: body.API_SECRET,
+      apikey: api_key,
+      api_secret: body.API_SECRET,
       uploader_prefix: uploader_prefix,
       response: body
     };

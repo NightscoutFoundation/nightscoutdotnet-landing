@@ -6,6 +6,7 @@ exports = module.exports = function(app, mongoose) {
     internal_name: { type: String, default: '' },
     origin: { type: String, default: '' },
     apikey: { type: String, default: '' },
+    api_secret: { type: String, default: '' },
     internal: { type: Boolean, default: true },
     created_at: { type: Date, default: Date.now },
     uploader_prefix: { type: String, default: '' },
