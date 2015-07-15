@@ -171,7 +171,8 @@ function removePrefix (req, res, next) {
 // this function intercepts almost all requests to nginx
 function do_uploader_rewrite (req, res, next) {
   var original_host = req.headers['x-forwarded-host'] || req.hostname;
-  var prefix = original_host.split('-u.diabetes.watch').slice(0, -1).join("");
+  var pat = '-u' + req.app.config.cookie.domain;
+  var prefix = original_host.split(pat).slice(0, -1).join("");
   var scheme = req.headers['x-forwarded-proto'];
   var api_secret = req.headers['api-secret'];
   if (!req.user || !req.isAuthenticated( )) {
@@ -188,7 +189,8 @@ function do_uploader_rewrite (req, res, next) {
         req.app.db.models.Site.findOne(q, function (err, site) {
           console.log('MATCHING SITE', prefix, err, site);
           prefix = site.internal_name;
-          url = '/x-accel-redirectssl/u-' + prefix + '-backends.diabetes.watch/' + encodeURIComponent(req.url.slice(1));
+          var backend_prefix = req.app.config.proxy.PREFIX.BACKENDS;
+          url = '/x-accel-redirectssl/u-' + prefix + backend_prefix + '/' + encodeURIComponent(req.url.slice(1));
           res.header('API-SECRET', api_secret);
           res.header('X-Accel-Redirect', url);
           res.end( );
@@ -207,7 +209,8 @@ function do_uploader_rewrite (req, res, next) {
 function do_nginx_rewrite (req, res, next) {
   var ORIGIN = process.env['ORIGIN'];
   var original_host = req.headers['x-forwarded-host'] || req.hostname;
-  var prefix = original_host.split('-login.diabetes.watch').slice(0, -1).join("");
+  var pat = req.app.config.proxy.PREFIX.VIEWER;
+  var prefix = original_host.split(pat).slice(0, -1).join("");
   var scheme = req.headers['x-forwarded-proto'];
   if (!req.user || !req.isAuthenticated( )) {
     console.log('SKIPPING PROXY sending to next');
@@ -238,7 +241,8 @@ function do_nginx_rewrite (req, res, next) {
       if (site.name == prefix) {
         console.log('changing prefix', prefix, site.internal_name);
         prefix = site.internal_name;
-        uri = '/x-accel-redirectssl/u-' + prefix + '-backends.diabetes.watch/' + encodeURIComponent(req.url.slice(1));
+        var backend_prefix = req.app.config.proxy.PREFIX.BACKENDS;
+        uri = '/x-accel-redirectssl/u-' + prefix + backend_prefix + '/' + encodeURIComponent(req.url.slice(1));
         console.log('MATCHING SITE', prefix, uri, site);
         break;
       }
