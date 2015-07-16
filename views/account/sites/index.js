@@ -119,7 +119,7 @@ exports.create = function(req, res, next) {
     console.log("DONE", err, result, body);
     // req.db.
     if (err) {
-      next(err);
+      return next(err);
     }
 
     var shasum = crypto.createHash('sha1');
