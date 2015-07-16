@@ -4,11 +4,16 @@ var request = require('request');
 var crypto = require('crypto');
 var renderSites = function(req, res, next) {
 
+  var bases = {
+    viewer: req.app.config.proxy.PREFIX.VIEWER
+  };
+
   req.user.roles.account.populate('sites', 
     function (err, account) {
       var sites = account.sites;
+      sites = sites.map(sitePrefixes(bases));
       console.log('SITES', sites);
-      res.render('account/sites/index', {user: req.user, sites: sites });
+      res.render('account/sites/index', {user: req.user, sites: sites, bases: bases });
   }) ;
   // next( );
 }
@@ -17,12 +22,22 @@ exports.init = function(req, res, next){
   renderSites(req, res, next, '');
 };
 
+function sitePrefixes (bases) {
+  function iter (item) {
+    item = item.toJSON( );
+    item.domain = item.name + bases.viewer;
+    return item;
+  }
+  return iter;
+}
+
 exports.list = function list (req, res, next) {
   // req.app.db
 
   req.user.roles.account.populate('sites', 
     function (err, account) {
       var sites = account.sites;
+      sites = sites.map(sitePrefixes({viewer: req.app.config.proxy.PREFIX.VIEWER }));
       console.log('SITES', sites);
       res.json(sites);
   }) ;

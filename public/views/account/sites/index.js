@@ -12,7 +12,8 @@
       var names = clone.find('.v.name');
       names.filter(':input').val(item.name);
       names.not(':input').text(item.name);
-      var base = '//' + item.name + '-login.diabetes.watch';
+      // var base = '//' + item.name + '-login.diabetes.watch';
+      var base = '//' + item.domain;
       clone.find('IMG.status').attr('src', base + '/api/v1/status.png');
       clone.find('A.v.view').attr('href', base + '/');
       clone.find('A.v.clock-mode').attr('href', base + '/clock.html');

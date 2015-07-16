@@ -41,7 +41,7 @@ block body
               a.v.view
                 tt
                   span.v.name
-                  | -login.diabetes.watch
+                  | #{bases.viewer}
             td
               span.v.status
               img.v.status
@@ -64,7 +64,7 @@ block body
               div Name 
               tt
                 input.control.site-name(type="text", name="name")
-                | -login.diabetes.watch
+                | #{bases.viewer}
           button.btn.btn-default(type="submit")
             i.fa.fa-plus
             |  Add new site
