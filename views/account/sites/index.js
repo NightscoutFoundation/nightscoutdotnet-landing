@@ -91,6 +91,9 @@ exports.remove = function(req, res, next) {
 }
 
 exports.create = function(req, res, next) {
+  var bases = {
+    viewer: req.app.config.proxy.PREFIX.VIEWER
+  };
   console.log("GOT NEW SITE REQUEST", req.body);
   // console.log("config", req.app.config);
   console.log("config", req.app.config.hosted.uri);
@@ -151,7 +154,7 @@ exports.create = function(req, res, next) {
       
       // renderSites(req, res, next, '');
       console.log("CREATED NEW SITE!", err, site);
-      res.render('account/sites/index', {user: req.user, site: site });
+      res.render('account/sites/index', {user: req.user, site: site, bases: bases });
     });
   });
 
