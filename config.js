@@ -35,6 +35,10 @@ exports.proxy = {
   },
   api: process.env['MULTIENV_API'] || 'http://localhost:3434'
 }
+exports.mqtt = {
+  public: process.env['MQTT_PUBLIC'] || 'nightscout.net'
+, private: process.env['MQTT_PRIVATE'] || 'mqtt-mm2.docker'
+};
 exports.requireAccountVerification = false;
 exports.smtp = {
   from: {

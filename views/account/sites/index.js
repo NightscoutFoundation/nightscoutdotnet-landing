@@ -115,6 +115,9 @@ exports.create = function(req, res, next) {
   var api_secret = crypto.randomBytes(256).slice(0, 20).toString('hex');
   var uploader_prefix = crypto.randomBytes(12).toString('hex');
   inst.API_SECRET = api_secret;
+  var mqtt_auth = [ uploader_prefix, api_secret ].join(':');
+  var private_mqtt = 'tcp://' + mqtt_auth + '@' + req.app.config.mqtt.private;
+  inst.MQTT_MONITOR = private_mqtt;
   var api = req.app.config.proxy.api;
   var creator_url = api + '/environs/' + inst.internal_name;
   console.log('sending', creator_url, inst);
