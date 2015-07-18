@@ -2,11 +2,20 @@
 
 var request = require('request');
 var crypto = require('crypto');
-var renderSites = function(req, res, next) {
 
+function get_bases (req) {
   var bases = {
     viewer: req.app.config.proxy.PREFIX.VIEWER
+  , uploader: '-u' + req.app.config.cookie.domain
+  , mqtt: req.app.config.mqtt
   };
+
+  return bases;
+}
+
+var renderSites = function(req, res, next) {
+
+  var bases = get_bases(req);
 
   req.user.roles.account.populate('sites', 
     function (err, account) {
@@ -25,7 +34,10 @@ exports.init = function(req, res, next){
 function sitePrefixes (bases) {
   function iter (item) {
     item = item.toJSON( );
+    var mqtt_auth = [ item.uploader_prefix, item.api_secret ].join(':');
     item.domain = item.name + bases.viewer;
+    item.upload = 'https://' + item.api_secret + '@' + item.uploader_prefix + bases.uploader + '/api/v1';
+    item.mqtt_monitor = 'tcp://' + mqtt_auth + '@' + bases.mqtt.public;
     return item;
   }
   return iter;
@@ -37,7 +49,7 @@ exports.list = function list (req, res, next) {
   req.user.roles.account.populate('sites', 
     function (err, account) {
       var sites = account.sites;
-      sites = sites.map(sitePrefixes({viewer: req.app.config.proxy.PREFIX.VIEWER }));
+      sites = sites.map(sitePrefixes(get_bases(req)));
       console.log('SITES', sites);
       res.json(sites);
   }) ;
@@ -91,9 +103,7 @@ exports.remove = function(req, res, next) {
 }
 
 exports.create = function(req, res, next) {
-  var bases = {
-    viewer: req.app.config.proxy.PREFIX.VIEWER
-  };
+  var bases = get_bases(req);
   console.log("GOT NEW SITE REQUEST", req.body);
   // console.log("config", req.app.config);
   console.log("config", req.app.config.hosted.uri);
