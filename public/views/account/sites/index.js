@@ -69,8 +69,8 @@
         mqtt: button.find('A.mqtt-upload').attr('href')
       , rest: button.find('A.mqtt-upload').attr('href')
       };
-      $('#mqtt-upload-qr').qrcode(JSON.stringify({mqtt: { uri: uris.mqtt }}));
-      $('#http-upload-qr').qrcode(JSON.stringify({rest: { endpoint: [uris.rest] } }));
+      $('#mqtt-upload-qr .code').empty( ).qrcode(JSON.stringify({mqtt: { uri: uris.mqtt }}));
+      $('#http-upload-qr .code').empty( ).qrcode(JSON.stringify({rest: { endpoint: [uris.rest] } }));
     });
   });
 }( ));
