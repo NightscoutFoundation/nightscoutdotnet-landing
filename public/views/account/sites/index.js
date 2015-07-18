@@ -17,8 +17,8 @@
       clone.find('IMG.status').attr('src', base + '/api/v1/status.png');
       clone.find('A.v.view').attr('href', base + '/');
       clone.find('A.v.clock-mode').attr('href', base + '/clock.html');
-      clone.find('A.mqtt-upload').attr('href', item.upload);
-      clone.find('A.http-upload').attr('href', item.mqtt_monitor);
+      clone.find('A.mqtt-upload').attr('href', item.mqtt_monitor);
+      clone.find('A.http-upload').attr('href', item.upload);
       return clone;
     }
 
@@ -64,13 +64,20 @@
     root.on('click', '.btn.upload-details', upload_details);
     $('#Details').on('show.bs.modal', function (ev) {
       var button = $(ev.relatedTarget);
-      console.log('clicked on ', button);
       var uris = {
         mqtt: button.find('A.mqtt-upload').attr('href')
-      , rest: button.find('A.mqtt-upload').attr('href')
+      , rest: button.find('A.http-upload').attr('href')
       };
-      $('#mqtt-upload-qr .code').empty( ).qrcode(JSON.stringify({mqtt: { uri: uris.mqtt }}));
-      $('#http-upload-qr .code').empty( ).qrcode(JSON.stringify({rest: { endpoint: [uris.rest] } }));
+      console.log('uris', uris);
+      var json;
+      json = {mqtt: { uri: uris.mqtt }};
+      console.log('mqtt', json);
+      $('#mqtt-upload-qr .code').empty( ).qrcode(JSON.stringify(json));
+      $('#mqtt-upload-qr .uri').empty( ).text(uris.mqtt);
+      json = {rest: { endpoint: [uris.rest] } };
+      console.log('rest', json);
+      $('#http-upload-qr .code').empty( ).qrcode(JSON.stringify(json));
+      $('#http-upload-qr .uri').empty( ).text(uris.rest);
     });
   });
 }( ));
