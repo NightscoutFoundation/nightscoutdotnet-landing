@@ -88,14 +88,14 @@ block body
         .modal-body
           p Scan this image
           ul.nav.nav-tabs(role="tablist")
-            li(role="presentation")
+            li.active(role="presentation")
               a(href="#mqtt-upload-qr", role="tab", data-toggle="tab")
                 | MQTT
             li
               a(href="#http-upload-qr", data-toggle="tab")
                 | HTTP
           .tab-content
-            div.tab-pane#mqtt-upload-qr(role="tabpanel")
+            div.active.tab-pane#mqtt-upload-qr(role="tabpanel")
               div.code
               p
                 tt.uri
