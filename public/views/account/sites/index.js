@@ -17,6 +17,8 @@
       clone.find('IMG.status').attr('src', base + '/api/v1/status.png');
       clone.find('A.v.view').attr('href', base + '/');
       clone.find('A.v.clock-mode').attr('href', base + '/clock.html');
+      clone.find('A.mqtt-upload').attr('href', item.upload);
+      clone.find('A.http-upload').attr('href', item.mqtt_monitor);
       return clone;
     }
 
@@ -39,6 +41,10 @@
     $.ajax(opts).done(done);
   }
 
+  function upload_details (ev) {
+    console.log('got', ev.target, this);
+  }
+
   $(document).ready(function ( ) {
     // app.mainView = new app.MainView();
     console.log('sites ready');
@@ -55,5 +61,16 @@
       });
     });
     root.on('click', 'TR.site-row .delete-site', delete_site);
+    root.on('click', '.btn.upload-details', upload_details);
+    $('#Details').on('show.bs.modal', function (ev) {
+      var button = $(ev.relatedTarget);
+      console.log('clicked on ', button);
+      var uris = {
+        mqtt: button.find('A.mqtt-upload').attr('href')
+      , rest: button.find('A.mqtt-upload').attr('href')
+      };
+      $('#mqtt-upload-qr').qrcode(JSON.stringify({mqtt: { uri: uris.mqtt }}));
+      $('#http-upload-qr').qrcode(JSON.stringify({rest: { endpoint: [uris.rest] } }));
+    });
   });
 }( ));

@@ -27,6 +27,10 @@ module.exports = function(grunt) {
             src: ['jquery.js'], dest: 'public/vendor/jquery/'
           },
           {
+            expand: true, cwd: 'bower_components/jquery-qrcode/',
+            src: ['jquery.qrcode.min.js'], dest: 'public/vendor/jquery-qrcode/'
+          },
+          {
             expand: true, cwd: 'bower_components/jquery.cookie/',
             src: ['jquery.cookie.js'], dest: 'public/vendor/jquery.cookie/'
           },

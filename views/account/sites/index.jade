@@ -18,6 +18,7 @@ block head
 block feet
   //- script(src='/views/account/sites/index.min.js?#{cacheBreaker}')
   script(src='/vendor/d3/d3.min.js')
+  script(src='/vendor/jquery-qrcode/jquery.qrcode.min.js')
   script(src='/views/account/sites/index.js?#{cacheBreaker}')
 
 block body
@@ -46,6 +47,11 @@ block body
               span.v.status
               img.v.status
             td
+              span.upload-details.btn(data-toggle="modal", data-target="#Details")
+                i.fa.fa-cloud-upload
+                | Uploaders
+                a.mqtt-upload.hidden
+                a.http-upload.hidden
               a.v.view.btn
                 i.fa.fa-anchor
                 | View
@@ -68,3 +74,27 @@ block body
           button.btn.btn-default(type="submit")
             i.fa.fa-plus
             |  Add new site
+
+  div.modal.fade#Details(role="dialog", tabindex="-1")
+    .modal-dialog(role="document")
+      .modal-content
+        .modal-header
+          h4 Uploading Details
+          button.close(data-dismiss="modal")
+            i.fa.fa-close
+        .modal-body
+          p Scan this image
+          ul.nav.nav-tabs(role="tablist")
+            li(role="presentation")
+              a(href="#mqtt-upload-qr", role="tab", data-toggle="tab")
+                | MQTT
+            li
+              a(href="#http-upload-qr", data-toggle="tab")
+                | HTTP
+          .tab-content
+            div.tab-pane#mqtt-upload-qr(role="tabpanel")
+              div.code
+            div.tab-pane#http-upload-qr(role="tabpanel")
+              div.code
+          div#qrcode
+
