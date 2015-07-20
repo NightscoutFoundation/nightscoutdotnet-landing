@@ -39,6 +39,7 @@ app.set('port', config.port);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
+app.use(do_guest_rewrite);
 //middleware
 app.use(require('morgan')('dev'));
 app.use(require('compression')());
@@ -165,6 +166,33 @@ function removePrefix (req, res, next) {
     console.log('should remove', req.url);
   }
   return next( );
+}
+
+function do_guest_rewrite (req, res, next) {
+  var original_host = req.headers['x-forwarded-host'] || req.hostname;
+  var pat = req.app.config.proxy.PREFIX.GUEST;
+  var prefix = original_host.split(pat).slice(0, -1).join("");
+  var tail = original_host.split(pat).slice(1).join("");
+  if (prefix + pat == original_host && tail == "" && prefix.split('-').length == 2) {
+    res.isGUEST = true;
+    res.prefix = prefix;
+    var q = {
+      expected_name: prefix
+    };
+    req.app.db.models.View.findOne(q, function (err, view) {
+      if (view) {
+        var backend_prefix = req.app.config.proxy.PREFIX.BACKENDS;
+        var url = '/x-accel-redirectssl/u-' + view.site.internal_name + backend_prefix + '/' + encodeURIComponent(req.url.slice(1));
+        res.header('X-Accel-Redirect', url);
+        res.end( );
+        return;
+      }
+      res.status(403);
+      res.end( );
+    });
+    return;
+  }
+  next( );
 }
 
 // middleware leveraging nginx to re-proxy
