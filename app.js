@@ -188,6 +188,11 @@ function do_uploader_rewrite (req, res, next) {
         console.log('find site with', q);
         req.app.db.models.Site.findOne(q, function (err, site) {
           console.log('MATCHING SITE', prefix, err, site);
+          if (!site) {
+            res.status(418);
+            res.end( );
+            return;
+          }
           prefix = site.internal_name;
           var backend_prefix = req.app.config.proxy.PREFIX.BACKENDS;
           url = '/x-accel-redirectssl/u-' + prefix + backend_prefix + '/' + encodeURIComponent(req.url.slice(1));
