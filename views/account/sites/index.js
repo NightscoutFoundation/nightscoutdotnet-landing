@@ -39,17 +39,16 @@ exports.examine = function(req, res, next){
   , account: { id: req.user.roles.account._id },
   };
   if (req.xhr) {
-    console.log("SDLKFJDLF KDFK JSDLFK JDF");
     res.set('json');
     res.set('Content-Type', 'application/json');
   }
-  req.app.db.models.Site.findOne(q, function (err, site) {
+  req.app.db.models.Site.findOne(q, function (err, sites) {
 
     req.accept
-    if (err || site == null) {
+    if (err || sites == null) {
       return next(err);
     }
-    site = [site].map(sitePrefixes(get_bases(req))).pop( );
+    var site = [sites].map(sitePrefixes(get_bases(req))).pop( );
     var data = { user: req.user, name: req.params.name, site: site, bases: bases };
     res.format({
       'json': function ( ) {
