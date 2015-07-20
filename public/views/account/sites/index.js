@@ -79,7 +79,7 @@
     inspector.on('loaded', function (ev, body) {
       console.log('loaded inspector', body);
       fill_details($(this), body.site);
-      fill_details($(this), body);
+      // fill_details($(this), body);
       $('#Details').trigger('show.bs.modal');
     });
     
