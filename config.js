@@ -31,7 +31,9 @@ exports.proxy = {
   ORIGIN: process.env['ORIGIN'],
   PREFIX: {
     VIEWER: process.env['PROXY_PREFIX_VIEWER'] || '-login.diabetes.watch',
-    BACKENDS: process.env['PROXY_PREFIX_BACKEND'] || '-backends.diabetes.watch'
+    BACKENDS: process.env['PROXY_PREFIX_BACKEND'] || '-backends.diabetes.watch',
+    PEBBLE: process.env['PROXY_PREFIX_PEBBLE'] || 'pebble.nightscout.net/pebbler',
+    GUEST: process.env['PROXY_PREFIX_GUEST'] || '-guest.nightscout.net'
   },
   api: process.env['MULTIENV_API'] || 'http://localhost:3434'
 }

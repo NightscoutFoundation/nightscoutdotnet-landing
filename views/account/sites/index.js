@@ -8,6 +8,8 @@ function get_bases (req) {
     viewer: req.app.config.proxy.PREFIX.VIEWER
   , uploader: '-u' + req.app.config.cookie.domain
   , mqtt: req.app.config.mqtt
+  , guest: req.app.config.proxy.PREFIX.GUEST
+  , pebble: req.app.config.proxy.PREFIX.PEBBLE
   };
 
   return bases;
@@ -31,8 +33,103 @@ exports.init = function(req, res, next){
   renderSites(req, res, next, '');
 };
 
+exports.listView = function (req, res, next) {
+  var q = {
+    created_by: { id: req.user.roles.account._id }
+  , site: { id: req.hosted_site._id
+          , internal_name: req.hosted_site.internal_name
+    }
+  };
+  req.app.db.models.View.find(q, function (err, docs) {
+    var views = docs.map(guestPrefixes(req.bases));
+    res.format({
+      json: function ( ) {
+        if (err) {
+          return next(err);
+        }
+        res.json(views || [ ]);
+      }
+    });
+  });
+};
 
-exports.examine = function(req, res, next){
+exports.createView = function (req, res, next) {
+  var key = req.hosted_site.uploader_prefix.slice(0, 6);
+  var name = req.body.viewName;
+  var expected_name = name + '-' + key;
+  var inputs = {
+    name: name
+  , created_by: { id: req.user.roles.account._id }
+  , site: { id: req.hosted_site._id
+          , internal_name: req.hosted_site.internal_name
+    }
+  , key: key
+  , expected_name: expected_name
+
+  };
+  console.log('creating new view', inputs);
+  var q = {
+    name: name
+  , key: key
+  , site: inputs.site
+  };
+
+  req.app.db.models.View.findOneAndUpdate(q, inputs, {upsert: true}, function (err, view) {
+    if (err) {
+      return next(err);
+    }
+    res.status(201);
+    res.format({
+      json: function ( ) {
+        res.json(view);
+      },
+      html: function ( ) {
+        res.redirect('/account/sites/' + req.hosted_site.name);
+      }
+    });
+  });
+};
+
+exports.deleteView = function (req, res, next) {
+  var q = {
+    name: req.params.viewName
+  , site: { id: req.hosted_site._id
+          , internal_name: req.hosted_site.internal_name
+    }
+  };
+  req.app.db.models.View.remove(q, function (err, site) {
+    if (err) {
+      return next(err);
+    }
+    res.status(204).send("").end( );
+  });
+};
+
+exports.findSite = function (req, res, next) {
+  var bases = get_bases(req);
+  var q = {
+    name: req.params.name
+  , account: { id: req.user.roles.account._id },
+  };
+  req.bases = bases;
+  if (req.xhr) {
+    res.set('json');
+    res.set('Content-Type', 'application/json');
+  }
+
+  req.app.db.models.Site.findOne(q, function (err, sites) {
+
+    if (err || sites == null) {
+      return next(err);
+    }
+    req.hosted_site = sites;
+    var site = [sites].map(sitePrefixes(bases)).pop( );
+    req.site = site;
+    return next( );
+  });
+};
+
+exports.examine = function (req, res, next) {
   var bases = get_bases(req);
   var q = {
     name: req.params.name
@@ -61,6 +158,17 @@ exports.examine = function(req, res, next){
   });
 };
 
+function guestPrefixes (bases) {
+  function iter (item) {
+    item = item.toJSON( );
+    item.domain = item.expected_name + bases.guest;
+    item.url = 'https://' + item.domain + '/';
+    item.pebble = 'https://' + item.domain + '/pebble';
+    return item;
+  }
+  return iter;
+}
+
 function sitePrefixes (bases) {
   function iter (item) {
     item = item.toJSON( );
@@ -69,6 +177,7 @@ function sitePrefixes (bases) {
     item.upload = 'https://' + item.api_secret + '@' + item.uploader_prefix + bases.uploader + '/api/v1';
     item.mqtt_monitor = 'tcp://' + mqtt_auth + '@' + bases.mqtt.public;
     item.settings = '/account/sites/' + item.name;
+    item.guest = '-' + item.uploader_prefix.slice(0, 6) + bases.guest;
     return item;
   }
   return iter;

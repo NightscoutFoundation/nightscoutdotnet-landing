@@ -29,8 +29,10 @@ block body
     div.col-sm-12
       div.page-header
         h1 #{name}
+
   div.row#Inspector(data-ajax-target='')
-    div.col-xs-4
+    div.col-xs-3
+
       div.tabbable.tabs-left
         ul.nav.nav-pills.nav-stacked(role="tablist")
           li.active(role="presentation")
@@ -49,41 +51,88 @@ block body
             a(role="tab", data-toggle="tab", href="#Pebble")
               i.fa.fa-cloud-download
               = ' Pebble'
+
     div.col-xs-8
         .tab-content
+
           div.tab-pane.active#Overview(role="tabpanel")
-            h2 Overview
-            .row
+            h4
+              i.fa.fa-home
+              = ' Overview'
+            :markdown
+              Quick summary of site status, and some handy links.
+            div
               a.v.view
                 tt
                   span.v.name
                   | #{bases.viewer}
-            .row(data-ajax-target='//#{site.domain}/api/v1/status.js')
+            div(data-ajax-target='//#{site.domain}/api/v1/status.js')
               span.v.status
               img.v.status
               tt
                 a.mqtt-upload.hidden MQTT
               tt
                 a.http-upload.hidden HTTP
-            .row
+            div.row
               a.v.view.btn
                 i.fa.fa-anchor
                 | View
               a.btn.v.clock-mode Clock mode
-            .row
+            div
               button.delete-site.btn.btn-danger.btn-sm
                 i.fa.fa-trash-o
+
+
           div.tab-pane#Views(role="tabpanel")
-            h2 Views
-            p
-              i Coming soon
+
+            h4
+              i.fa.fa-users
+              = ' Views'
+            :markdown
+              Manage urls to share.
+
+            table.table#views-list(data-ajax-target="/account/sites/#{site.name}/views")
+              tbody.head
+                tr
+                  th #
+                  th Name
+                  th Url
+                  th Permission
+                  th(colspan="1") 
+              tbody.body
+              tbody.template.hidden
+                tr.site-row
+                  td
+                    span.t.number #
+                  td
+                    span.t.name Name
+                  td
+                    span.t.url Url
+                  td
+                    span.t.permission
+                      | World readable, anyone with url can see.
+                  //- td
+                  //-  span.t.scopes Scopes
+                  td
+                    button.delete-view.btn.btn-danger(type="button")
+                      i.fa.fa-trash-o
+              tbody.tail.add-new-view
+                tr
+                  td(colspan="5")
+                    form(method="POST", action="/account/sites/#{site.name}/views")
+                      div.input-group
+                        input.form-control(type="text", name="viewName", placeholder="Name", aria-describedby="new-view-name")
+                        span.input-group-addon#new-view-name #{site.guest}
+                        div.input-group-btn
+                          button.btn.btn-success(type="button", data-toggle="dropdown", aria-haspopup="true", aria-expanded="true") Create public view
+
           div.tab-pane#Uploaders(role="tabpanel")
             div#Details(role="dialog", tabindex="-1")
               a.v.mqtt-upload.hidden
               a.v.http-upload.hidden
-              .modal-dialog(role="document")
-                .modal-content
-                  .modal-header
+              .xxmodal-dialog(role="document")
+                .xxxxmodal-content
+                  .xxxmodal-header
                     h4 
                       i.fa.fa-cloud-upload
                       = ' Uploading Details'

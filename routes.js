@@ -189,9 +189,12 @@ exports = module.exports = function(app, passport) {
   var sites = require('./views/account/sites/index');
   app.get('/account/sites/', sites.init);
   app.post('/account/sites/', sites.create);
+  app.delete('/account/sites/:name', sites.remove);
   app.get('/account/sites/list.json', sites.list);
   app.get('/account/sites/:name', sites.examine);
-  app.delete('/account/sites/:name', sites.remove);
+  app.get('/account/sites/:name/views', sites.findSite, sites.listView);
+  app.post('/account/sites/:name/views', sites.findSite, sites.createView);
+  app.delete('/account/sites/:name/views/:viewName', sites.findSite, sites.deleteView);
 
   // account > groups
   var groups = require('./views/account/groups/index');

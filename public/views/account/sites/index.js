@@ -29,6 +29,29 @@
     return iter;
   }
 
+  function viewTemplate (template) {
+    function iter (item, x) {
+      var clone = template.clone(true);
+      return fill_view_details(clone, item, x);
+    }
+    return iter;
+  }
+
+  function fill_view_details (clone, item, x) {
+    var names = clone.find('.t.name');
+    names.filter(':input').val(item.name);
+    names.not(':input').text(item.name);
+    clone.find('A.t.url').attr('href', item.url);
+    clone.find('A.t.guest').attr('href', item.guest);
+    clone.find('A.t.domain').attr('href', item.domain);
+    clone.find('A.t.pebble').attr('href', item.pebble);
+    clone.find('.t.domain').text(item.domain);
+    clone.find('.t.url').text(item.url);
+    clone.find('.t.pebble').text(item.pebble);
+    clone.find('.t.number').text(item.number);
+    return clone;
+  }
+
   function fill_details (clone, item) {
     var names = clone.find('.v.name');
     names.filter(':input').val(item.name);
@@ -42,6 +65,21 @@
     clone.find('A.http-upload').attr('href', item.upload);
     clone.find('A.v.settings').attr('href', item.settings);
     return clone;
+  }
+
+  function delete_view (ev) {
+    var row = $(this).closest('.site-row');
+    var viewName = row.find('.t.name:first').text( );
+    var siteName = $('#Inspector').find('.v.name:first').text( );
+    var opts = {
+      url: '/account/sites/' + siteName + '/views/' + viewName
+    , method: 'delete'
+    };
+
+    function done (data, status, xhr) {
+      row.remove( );
+    }
+    $.ajax(opts).done(done);
   }
 
   function delete_site (ev) {
@@ -78,12 +116,31 @@
     var inspector = $('#Inspector');
     inspector.on('loaded', function (ev, body) {
       console.log('loaded inspector', body);
-      fill_details($(this), body.site);
-      // fill_details($(this), body);
-      $('#Details').trigger('show.bs.modal');
+      if (body && body.site) {
+        fill_details($(this), body.site);
+        // fill_details($(this), body);
+        $('#Details').trigger('show.bs.modal');
+      }
+    });
+
+    var views = $('#views-list');
+    views.on('loaded', function (ev, data) {
+      console.log('loaded', views, data);
+      var body = views.find('.body');
+      if (data) {
+        var template = viewTemplate(views.find('.template TR').clone(true).removeClass('template'));
+        data.map(function (site, i) {
+          site.number = i;
+          console.log('iiii', i, site.number, site);
+          var elem = template(site, i);
+          body.append(elem);
+        });
+      }
+
     });
     
     root.on('click', 'TR.site-row .delete-site', delete_site);
+    $('#Inspector').on('click', '.site-row .delete-view', delete_view);
     root.on('click', '.btn.upload-details', upload_details);
     $('#Details').on('show.bs.modal', function (ev) {
       var button = $(ev.relatedTarget || ev.target);
