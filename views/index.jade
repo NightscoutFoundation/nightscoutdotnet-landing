@@ -1,37 +1,37 @@
 extends ../layouts/default
 
 block head
-  title Drywall is Running
+  title Nightscout.Net Hosting 
 
 block neck
   link(rel='stylesheet', href='/views/index.min.css?#{cacheBreaker}')
 
 block body
   div.jumbotron
-    h1 Success
+    h1 Welcome to Nightscout.net
     p.lead
-      | Your Node.js website and user system is running. May the force be with you.
+      | Nightscout.net is a completely turnkey solution for individuals looking to run the nightscout remote monitoring system. Sign up or Sign In below. 
       div
         a.btn.btn-primary.btn-lg(href='/signup/') Create an Account
         |  or&nbsp;
-        a.btn.btn-warning.btn-lg(href='/login/forgot/') Reset Your Password
+        a.btn.btn-warning.btn-lg(href='/login/') Login to Your Password
       div.clearfix
   div.row
     div.col-sm-4
       div.panel.panel-default
         div.panel-body
-          h3 About Us
-          p At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti.
-          a.btn.btn-default.btn-block(href='/about/') Learn More
+          h3 About Nightscout.net
+          p Nightscout.net is a free solution provided by the Nightscout Foundation for individual users. Learn more about the Foundation here.
+          a.btn.btn-default.btn-block(href='http://www,nightscoutfoundation.org/') The Nightscout Foundation
     div.col-sm-4
       div.panel.panel-default
         div.panel-body
           h3 Sign Up
-          p At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti.
-          a.btn.btn-default.btn-block(href='/signup/') Learn More
+          p Sign up to use the Nightscout.net service here. Please remember that this service is in a testing phase.
+          a.btn.btn-default.btn-block(href='/signup/') Help the Testing
     div.col-sm-4
       div.panel.panel-default
         div.panel-body
-          h3 Contact Us
-          p At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti.
-          a.btn.btn-default.btn-block(href='/contact/') Learn More
+          h3 Support This Project
+          p This project is a direct effort of the Nightscout Foundation, a 501(c)3 company. Your support keeps it going!
+          a.btn.btn-default.btn-block(href='http://www,nightscoutfoundation.org/donate') Support Nightscout.net
