@@ -1,0 +1,116 @@
+extends ../../../layouts/account
+
+block head
+  title My Sites
+  //- link(rel='stylesheet', href='/views/account/sites/index.min.css?#{cacheBreaker}')
+  style(type='text/css')
+    :css
+      .template-site {
+        display: none;
+      }
+
+      #create INPUT.site-name {
+        text-align: right;
+      }
+
+      #Details .tab-content {
+        text-align: center;
+      }
+
+block feet
+  //- script(src='/views/account/sites/index.min.js?#{cacheBreaker}')
+  //- script(src='#{bases.viewer/api/v1/status.js}')
+  script(src='/vendor/d3/d3.min.js')
+  script(src='/vendor/jquery-qrcode/jquery.qrcode.min.js')
+  script(src='/views/account/sites/index.js?#{cacheBreaker}')
+
+block body
+  div.row
+    div.col-sm-12
+      div.page-header
+        h1 #{name}
+  div.row#Inspector(data-ajax-target='')
+    div.col-xs-4
+      div.tabbable.tabs-left
+        ul.nav.nav-pills.nav-stacked(role="tablist")
+          li.active(role="presentation")
+            a(role="tab", data-toggle="tab", href="#Overview")
+              i.fa.fa-home
+              = ' Overview'
+          li(role="presentation")
+            a(role="tab", data-toggle="tab", href="#Views")
+              i.fa.fa-users
+              = ' Views'
+          li(role="presentation")
+            a(role="tab", data-toggle="tab", href="#Uploaders")
+              i.fa.fa-cloud-upload
+              = ' Uploaders'
+          li(role="presentation")
+            a(role="tab", data-toggle="tab", href="#Pebble")
+              i.fa.fa-cloud-download
+              = ' Pebble'
+    div.col-xs-8
+        .tab-content
+          div.tab-pane.active#Overview(role="tabpanel")
+            h2 Overview
+            .row
+              a.v.view
+                tt
+                  span.v.name
+                  | #{bases.viewer}
+            .row
+              span.v.status
+              img.v.status
+              tt
+                a.mqtt-upload.hidden MQTT
+              tt
+                a.http-upload.hidden HTTP
+            .row
+              a.v.view.btn
+                i.fa.fa-anchor
+                | View
+              a.btn.v.clock-mode Clock mode
+            .row
+              button.delete-site.btn.btn-danger.btn-sm
+                i.fa.fa-trash-o
+          div.tab-pane#Views(role="tabpanel")
+            h2 Views
+            p
+              i Coming soon
+          div.tab-pane#Uploaders(role="tabpanel")
+            div#Details(role="dialog", tabindex="-1")
+              a.v.mqtt-upload.hidden
+              a.v.http-upload.hidden
+              .modal-dialog(role="document")
+                .modal-content
+                  .modal-header
+                    h4 
+                      i.fa.fa-cloud-upload
+                      = ' Uploading Details'
+                    button.close(data-dismiss="modal")
+                      i.fa.fa-close
+                  .modal-body
+                    p Scan this image
+                    ul.nav.nav-tabs(role="tablist")
+                      li.active(role="presentation")
+                        a(href="#mqtt-upload-qr", role="tab", data-toggle="tab")
+                          | MQTT
+                      li
+                        a(href="#http-upload-qr", data-toggle="tab")
+                          | HTTP
+                    .tab-content
+                      div.active.tab-pane#mqtt-upload-qr(role="tabpanel")
+                        div.code
+                        p
+                          tt.uri
+                      div.tab-pane#http-upload-qr(role="tabpanel")
+                        div.code
+                        p
+                          tt.uri
+
+          div.tab-pane#Pebble(role="tabpanel")
+            h2 Pebble
+            p
+              i Coming soon
+
+

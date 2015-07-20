@@ -31,6 +31,37 @@ exports.init = function(req, res, next){
   renderSites(req, res, next, '');
 };
 
+
+exports.examine = function(req, res, next){
+  var bases = get_bases(req);
+  var q = {
+    name: req.params.name
+  , account: { id: req.user.roles.account._id },
+  };
+  if (req.xhr) {
+    console.log("SDLKFJDLF KDFK JSDLFK JDF");
+    res.set('json');
+    res.set('Content-Type', 'application/json');
+  }
+  req.app.db.models.Site.findOne(q, function (err, site) {
+
+    req.accept
+    if (err || site == null) {
+      return next(err);
+    }
+    site = [site].map(sitePrefixes(get_bases(req))).pop( );
+    var data = { user: req.user, name: req.params.name, site: site, bases: bases };
+    res.format({
+      'json': function ( ) {
+        res.json(data);
+      },
+      'html': function ( ) {
+        res.render('account/sites/examine', data);
+      }
+    });
+  });
+};
+
 function sitePrefixes (bases) {
   function iter (item) {
     item = item.toJSON( );
@@ -38,6 +69,7 @@ function sitePrefixes (bases) {
     item.domain = item.name + bases.viewer;
     item.upload = 'https://' + item.api_secret + '@' + item.uploader_prefix + bases.uploader + '/api/v1';
     item.mqtt_monitor = 'tcp://' + mqtt_auth + '@' + bases.mqtt.public;
+    item.settings = '/account/sites/' + item.name;
     return item;
   }
   return iter;

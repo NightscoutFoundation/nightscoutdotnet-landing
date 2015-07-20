@@ -36,7 +36,7 @@ block body
             th Name
             th Status
             th
-        tbody.sites.list#site-list
+        tbody.sites.list#site-list(data-ajax-target='/account/sites/list.json')
         tbody.sites.skeleton.template-site
           tr.site-row
             td
@@ -54,6 +54,9 @@ block body
                 | Uploaders
                 a.mqtt-upload.hidden
                 a.http-upload.hidden
+              a.v.settings.btn
+                i.fa.fa-cog
+
               a.v.view.btn
                 i.fa.fa-anchor
                 | View
