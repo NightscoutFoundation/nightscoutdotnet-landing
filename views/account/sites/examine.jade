@@ -19,7 +19,7 @@ block head
 
 block feet
   //- script(src='/views/account/sites/index.min.js?#{cacheBreaker}')
-  //- script(src='#{bases.viewer/api/v1/status.js}')
+  script(src='#{site.view}/api/v1/status.js')
   script(src='/vendor/d3/d3.min.js')
   script(src='/vendor/jquery-qrcode/jquery.qrcode.min.js')
   script(src='/views/account/sites/index.js?#{cacheBreaker}')
