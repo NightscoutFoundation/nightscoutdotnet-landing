@@ -47,7 +47,8 @@
     clone.find('A.t.pebble').attr('href', item.pebble);
     clone.find('.t.domain').text(item.domain);
     clone.find('.t.href').text(item.url);
-    clone.find('.t.pebble').text(item.pebble);
+    clone.find('A.t.pebble').attr('href', item.pebble);
+    clone.find('.t.pebble-text').text(item.pebble);
     clone.find('.t.number').text(item.number);
     return clone;
   }
@@ -131,12 +132,22 @@
         var template = viewTemplate(views.find('.template TR').clone(true).removeClass('template'));
         data.map(function (site, i) {
           site.number = i;
-          console.log('iiii', i, site.number, site);
           var elem = template(site, i);
           body.append(elem);
         });
       }
 
+    });
+    var pebble = $('#Pebble').on('loaded', function (ev, data) {
+      var body = pebble.find('.list-group');
+      if (data) {
+        var template = viewTemplate(pebble.find('.pebble-template').clone(true).removeClass('pebble-template'));
+        data.map(function (site, i) {
+          site.number = i;
+          var elem = template(site, i);
+          body.append(elem);
+        });
+      }
     });
     
     root.on('click', 'TR.site-row .delete-site', delete_site);

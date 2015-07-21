@@ -158,9 +158,16 @@ block body
                         p
                           tt.uri
 
-          div.tab-pane#Pebble(role="tabpanel")
-            h2 Pebble
-            p
-              i Coming soon
+          div.tab-pane#Pebble(role="tabpanel", data-ajax-target="/account/sites/#{site.name}/views")
+            h4
+              i.fa.fa-cloud-download
+              = ' Pebble'
+            div.list-group
+              div.pebble-template
+                a.list-group-item.t.pebble
+                  span.badge.t.name Name
+                  h4.list-group-item-heading
+                    span.t.pebble-text Link
+
 
 
