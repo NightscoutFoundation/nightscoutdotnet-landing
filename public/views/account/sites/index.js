@@ -46,7 +46,7 @@
     clone.find('A.t.domain').attr('href', item.domain);
     clone.find('A.t.pebble').attr('href', item.pebble);
     clone.find('.t.domain').text(item.domain);
-    clone.find('.t.url').text(item.url);
+    clone.find('.t.href').text(item.url);
     clone.find('.t.pebble').text(item.pebble);
     clone.find('.t.number').text(item.number);
     return clone;

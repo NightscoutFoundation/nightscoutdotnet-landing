@@ -213,9 +213,9 @@ function do_uploader_rewrite (req, res, next) {
           apikey: api_secret
         , uploader_prefix: prefix
         };
-        console.log('find site with', q);
+        // console.log('find site with', q);
         req.app.db.models.Site.findOne(q, function (err, site) {
-          console.log('MATCHING SITE', prefix, err, site);
+          // console.log('MATCHING SITE', prefix, err, site);
           if (!site) {
             res.status(418);
             res.end( );
@@ -248,9 +248,9 @@ function do_nginx_rewrite (req, res, next) {
   if (!req.user || !req.isAuthenticated( )) {
     console.log('SKIPPING PROXY sending to next');
     if (prefix) {
-      console.log('on invalid prefix', prefix);
+      // console.log('on invalid prefix', prefix);
       var url = scheme + "://" + req.hostname;
-      console.log('sending', url);
+      // console.log('sending', url);
       res.redirect(url);
       return res.end( );
     }
@@ -268,7 +268,7 @@ function do_nginx_rewrite (req, res, next) {
   var uri = ORIGIN + '/' + encodeURIComponent(req.url.slice(1));
   // if (req.session.do_proxy) {
   if (prefix) {
-    console.log("SITES FOR prefix", prefix, req.user.username, req.user.roles.account.sites);
+    // console.log("SITES FOR prefix", prefix, req.user.username, req.user.roles.account.sites);
     for (var x in req.user.roles.account.sites) {
       var site = req.user.roles.account.sites[x];
       if (site.name == prefix) {
@@ -276,12 +276,12 @@ function do_nginx_rewrite (req, res, next) {
         prefix = site.internal_name;
         var backend_prefix = req.app.config.proxy.PREFIX.BACKENDS;
         uri = '/x-accel-redirectssl/u-' + prefix + backend_prefix + '/' + encodeURIComponent(req.url.slice(1));
-        console.log('MATCHING SITE', prefix, uri, site);
+        // console.log('MATCHING SITE', prefix, uri, site);
         break;
       }
     }
     console.log("PROXY FOR HOST", original_host, prefix);
-    console.log('redirecting internally', req.user);
+    // console.log('redirecting internally', req.user);
     if (req.url.indexOf('/logout') === 0) {
       console.log('logout', req.url);
       req.session.do_proxy = false;
