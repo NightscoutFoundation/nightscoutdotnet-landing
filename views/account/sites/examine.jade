@@ -52,7 +52,7 @@ block body
               i.fa.fa-cloud-download
               = ' Pebble'
 
-    div.col-xs-8
+    div.col-xs-9
         .tab-content
 
           div.tab-pane.active#Overview(role="tabpanel")
@@ -96,7 +96,7 @@ block body
                 tr
                   th #
                   th Name
-                  th Url
+                  th(colspan="2") Url
                   th Permission
                   th(colspan="1") 
               tbody.body
@@ -107,7 +107,7 @@ block body
                   td
                     a.t.url.name
                       span.t.name Name
-                  td
+                  td(colspan="2")
                     a.t.href.url Url
                   td
                     span.t.permission
@@ -115,7 +115,7 @@ block body
                   //- td
                   //-  span.t.scopes Scopes
                   td
-                    button.delete-view.btn.btn-danger(type="button")
+                    button.delete-view.btn.btn-xs.btn-danger(type="button")
                       i.fa.fa-trash-o
               tbody.tail.add-new-view
                 tr
