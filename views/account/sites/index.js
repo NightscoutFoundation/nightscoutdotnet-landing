@@ -280,7 +280,7 @@ exports.create = function(req, res, next) {
   // var creator_url = api + '/environs/' + inst.internal_name;
   // XXX
   var account_id = req.user.roles.account._id;
-  var creator_url = api + '/account/' + account_id + '/sites';
+  var creator_url = api + '/accounts/' + account_id + '/sites';
   console.log('sending', creator_url, posted);
   // request.post({ url: creator_url, json: inst }, function done (err, result, body) { });
   request.post({ url: creator_url, json: posted }, function done (err, result, body) {
