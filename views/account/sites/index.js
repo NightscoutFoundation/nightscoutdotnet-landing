@@ -268,25 +268,38 @@ exports.create = function(req, res, next) {
   var mqtt_auth = [ uploader_prefix, api_secret ].join(':');
   var private_mqtt = 'tcp://' + mqtt_auth + '@' + req.app.config.mqtt.private;
   inst.MQTT_MONITOR = private_mqtt;
-  var api = req.app.config.proxy.api;
-  var creator_url = api + '/environs/' + inst.internal_name;
-  console.log('sending', creator_url, inst);
-  request.post({ url: creator_url, json: inst }, function done (err, result, body) {
-    console.log("DONE", err, result, body);
+  var posted = {
+    name: req.body.name
+  , uploader_prefix: uploader_prefix
+  , salter: internal_name
+  , api_secret: api_secret
+  , internal_name: internal_name
+  };
+  var api = req.app.config.proxy.provision;
+  // var api = req.app.config.proxy.api;
+  // var creator_url = api + '/environs/' + inst.internal_name;
+  // XXX
+  var account_id = req.user.roles.account._id;
+  var creator_url = api + '/account/' + account_id + '/sites';
+  console.log('sending', creator_url, posted);
+  // request.post({ url: creator_url, json: inst }, function done (err, result, body) { });
+  request.post({ url: creator_url, json: posted }, function done (err, result, body) {
+    console.log("DONE", err, body);
     // req.db.
     if (err) {
       return next(err);
     }
 
     var shasum = crypto.createHash('sha1');
-    shasum.update(body.API_SECRET);
+    // shasum.update(body.API_SECRET);
+    shasum.update(api_secret);
     var api_key = shasum.digest('hex');
     var fieldsToSet = {
       name: req.body.name,
-      internal_name: body.internal_name,
+      internal_name: internal_name,
       account: { id: req.user.roles.account._id },
       apikey: api_key,
-      api_secret: body.API_SECRET,
+      api_secret: api_secret,
       uploader_prefix: uploader_prefix,
       response: body
     };

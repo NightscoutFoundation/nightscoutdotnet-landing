@@ -35,7 +35,8 @@ exports.proxy = {
     PEBBLE: process.env['PROXY_PREFIX_PEBBLE'] || 'pebble.nightscout.net/pebbler',
     GUEST: process.env['PROXY_PREFIX_GUEST'] || '-guest.nightscout.net'
   },
-  api: process.env['MULTIENV_API'] || 'http://localhost:3434'
+  api: process.env['MULTIENV_API'] || 'http://localhost:3434',
+  provision: process.env['PROVISION_API'] || 'http://localhost:6060' // provision.docker:6060
 }
 exports.mqtt = {
   public: process.env['MQTT_PUBLIC'] || 'nightscout.net'

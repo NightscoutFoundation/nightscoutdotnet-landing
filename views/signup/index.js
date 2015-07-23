@@ -1,5 +1,33 @@
 'use strict';
 
+var request = require('request');
+var crypto = require('crypto');
+
+function provisionAccount (config, user, account, cb) {
+  console.log('provisionAccount', user, account);
+  var provisionURI = config.proxy.provision + '/accounts'
+  var prefix = config.hosted.prefix;
+  var shasum = crypto.createHash('sha1');
+  console.log('accountid', account._id.toString( ));
+  shasum.update(prefix);
+  shasum.update(account._id.toString( ));
+  shasum.update(user._id.toString( ));
+  var name = prefix + shasum.digest('hex');
+  var inst = {
+    account: account._id.toString( )
+  , name: name
+  };
+  var workflow = this;
+  console.log("REQUESTIONG PROVISION", inst, provisionURI);
+  request.post({ url: provisionURI, json: inst }, function done (err, resp, body) {
+    console.log("PROVISIONED ACCOUNT", err, body);
+    if (err) {
+      return workflow.emit('exception', err);
+    }
+    cb(err, body);
+  });
+}
+
 exports.init = function(req, res){
   if (req.isAuthenticated()) {
     res.redirect(req.user.defaultReturnUrl());
@@ -126,8 +154,13 @@ exports.signup = function(req, res){
         if (err) {
           return workflow.emit('exception', err);
         }
-
-        workflow.emit('sendWelcomeEmail');
+        console.log("CREATING", user, account);
+        provisionAccount.call(workflow, req.app.config, user, account, function (err, body) {
+          if (err) {
+            return workflow.emit('exception', err);
+          }
+          workflow.emit('sendWelcomeEmail');
+        });
       });
     });
   });
@@ -432,8 +465,15 @@ exports.signupSocial = function(req, res){
         if (err) {
           return workflow.emit('exception', err);
         }
+        // request.post({ url: provisionURI, json: inst }, cb);
 
-        workflow.emit('sendWelcomeEmail');
+        provisionAccount.call(workflow, req.app.config, user, account, function (err, body) {
+          if (err) {
+            return workflow.emit('exception', err);
+          }
+          workflow.emit('sendWelcomeEmail');
+        });
+
       });
     });
   });
