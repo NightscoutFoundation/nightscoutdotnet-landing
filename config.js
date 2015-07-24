@@ -28,7 +28,7 @@ exports.loginAttempts = {
   logExpiration: '60m'
 };
 exports.proxy = {
-  ORIGIN: process.env['ORIGIN'],
+  ORIGIN: process.env['ORIGIN'] || '@proxy/',
   PREFIX: {
     VIEWER: process.env['PROXY_PREFIX_VIEWER'] || '-login.diabetes.watch',
     BACKENDS: process.env['PROXY_PREFIX_BACKEND'] || '-backends.diabetes.watch',
