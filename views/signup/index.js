@@ -12,7 +12,7 @@ function provisionAccount (config, user, account, cb) {
   shasum.update(prefix);
   shasum.update(account._id.toString( ));
   shasum.update(user._id.toString( ));
-  var name = prefix + shasum.digest('hex');
+  var name = prefix + shasum.digest('hex').slice(8);
   var inst = {
     account: account._id.toString( )
   , name: name
