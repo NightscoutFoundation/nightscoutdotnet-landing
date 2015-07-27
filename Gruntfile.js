@@ -15,6 +15,10 @@ module.exports = function(grunt) {
             src: ['backbone.js'], dest: 'public/vendor/backbone/'
           },
           {
+            expand: true, cwd: 'bower_components/chosen/',
+            src: ['chosen**'], dest: 'public/vendor/chosen/'
+          },
+          {
             expand: true, cwd: 'bower_components/font-awesome/',
             src: ['fonts/**', 'less/**'], dest: 'public/vendor/font-awesome/'
           },
@@ -25,6 +29,21 @@ module.exports = function(grunt) {
           {
             expand: true, cwd: 'bower_components/jquery/dist/',
             src: ['jquery.js'], dest: 'public/vendor/jquery/'
+          },
+          {
+            expand: true, cwd: 'bower_components/bootstrap-switch/dist/',
+            src: ['css/bootstrap3/bootstrap-switch.min.css'],
+            dest: 'public/vendor/bootstrap-switch/'
+          },
+          {
+            expand: true, cwd: 'bower_components/bootstrap-switch/dist/',
+            src: ['js/bootstrap-switch.min.js'],
+            dest: 'public/vendor/bootstrap-switch/'
+          },
+          {
+            expand: true, cwd: 'bower_components/bootstrap-toggle/',
+            src: ['js/bootstrap-toggle.min.js', 'css/bootstrap-toggle.min.css'],
+            dest: 'public/vendor/bootstrap-toggle/'
           },
           {
             expand: true, cwd: 'bower_components/jquery-qrcode/',

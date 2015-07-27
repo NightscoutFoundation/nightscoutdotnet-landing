@@ -103,6 +103,21 @@
   $(document).ready(function ( ) {
     // app.mainView = new app.MainView();
     console.log('sites ready');
+    $('.toggle-check').each(function ( ) {
+      var elem = $(this);
+      elem.bootstrapSwitch(
+        {
+          onText: elem.data('on')
+        , offText: elem.data('off')
+        }
+      );
+    });
+    $('.chosen-select').each(function ( ) {
+      var elem = $(this);
+      elem.chosen({
+        width: elem.data('width') || '91%'
+      });
+    });
     var root = $('#site-list');
     // $.get('/account/sites/list.json',
     root.on('loaded', function (ev, body, status, xhr) {

@@ -3,6 +3,9 @@ extends ../../../layouts/account
 block head
   title My Sites
   //- link(rel='stylesheet', href='/views/account/sites/index.min.css?#{cacheBreaker}')
+  //- link(rel='stylesheet', href='/vendor/bootstrap-toggle/css/bootstrap-toggle.min.css?#{cacheBreaker}')
+  link(rel='stylesheet', href='/vendor/bootstrap-switch/css/bootstrap3/bootstrap-switch.min.css')
+  link(rel='stylesheet', href='/vendor/chosen/chosen.min.css')
   style(type='text/css')
     :css
       .template-site {
@@ -22,6 +25,9 @@ block feet
   //- script(src='//#{site.domain}/api/v1/status.js')
   script(src='/vendor/d3/d3.min.js')
   script(src='/vendor/jquery-qrcode/jquery.qrcode.min.js')
+  script(src='/vendor/chosen/chosen.jquery.min.js')
+  //- script(src='/vendor/bootstrap-toggle/js/bootstrap-toggle.min.js')
+  script(src='/vendor/bootstrap-switch/js/bootstrap-switch.min.js')
   script(src='/views/account/sites/index.js?#{cacheBreaker}')
 
 block body
@@ -61,26 +67,297 @@ block body
               = ' Overview'
             :markdown
               Quick summary of site status, and some handy links.
-            div
-              a.v.view
+            div.panel.panel-default
+            
+              .panel-heading
+                a.v.view
+                  tt
+                    span.v.name
+                    | #{bases.viewer}
+              //- div.panel-body(data-ajax-target='//#{site.domain}/api/v1/status.js')
+              div.panel-body
+                span.v.status
+                img.v.status
                 tt
-                  span.v.name
-                  | #{bases.viewer}
-            div(data-ajax-target='//#{site.domain}/api/v1/status.js')
-              span.v.status
-              img.v.status
-              tt
-                a.mqtt-upload.hidden MQTT
-              tt
-                a.http-upload.hidden HTTP
-            div.row
-              a.v.view.btn
-                i.fa.fa-anchor
-                | View
-              a.btn.v.clock-mode Clock mode
-            div
-              button.delete-site.btn.btn-danger.btn-sm
-                i.fa.fa-trash-o
+                  a.mqtt-upload.hidden MQTT
+                tt
+                  a.http-upload.hidden HTTP
+                div.row
+                  a.v.view.btn
+                    i.fa.fa-anchor
+                    | View
+                  a.btn.v.clock-mode Clock mode
+              .panel-body
+                label.btn.btn-default
+                  = ' Custom title '
+                  input.e.env.custom_title(type="text", name="CUSTOM_TITLE")
+              .panel-body
+                label.btn.btn-default
+                  = ' Time format '
+                  input.toggle-check(type="checkbox", checked="checked", data-size="mini", data-toggle="toggle", data-on="12", data-off="24")
+                label.btn.btn-default
+                  = ' Theme '
+                  input.toggle-check(type="checkbox", checked="checked", data-size="mini", data-toggle="toggle", data-on="default", data-off="colors")
+                label.btn.btn-default
+                  = ' Nightmode '
+                  input.toggle-check(type="checkbox", data-size="mini", data-toggle="toggle", data-on="On", data-off="Off")
+              div.panel-body
+                label.btn.btn-default
+                  = ' Show raw data  '
+                  select.e.env.show_rawbg.chosen-select(data-placeholder="Enable" , data-width="48%")
+                    option(selected="selected")
+                      | always
+                    option
+                      | never
+                    option
+                      | noise
+              div.panel-body
+                  label.btn.btn-default
+                    = ' Enable '
+                    select.chosen-select(multiple="multiple", data-placeholder="Enable" )
+                      option
+                        | careportal
+                      option
+                        | rawbg
+                      option
+                        | iob
+                      option
+                        | cob
+                      option
+                        | bwp
+                      option
+                        | cage
+                      option(selected="selected")
+                        | delta
+                      option(selected="selected")
+                        | direction
+                      option(selected="selected")
+                        | upbat
+                      option(selected="selected")
+                        | upbat
+                      option(selected="selected")
+                        | ar2
+                      option
+                        | simplealarms
+                      option(selected="selected")
+                        | errorcodes
+                      option
+                        | treatmentnotify
+                      option
+                        | basal
+                      option
+                        | pushover
+                      option
+                        | maker
+
+                //- form.form-inline
+                //- div.panel.panel-default
+              .panel-footer
+                    label.btn.btn-default
+                      = 'Units '
+                      input.toggle-check(type="checkbox", checked="checked", data-size="mini", data-toggle="toggle", data-on="mg/dL", data-off="mmol")
+            //- div.panel.panel-default
+              //- .panel-heading
+                  label.btn.btn-default
+                    = ' Careportal '
+                    input.toggle-check(type="checkbox", data-size="mini", data-toggle="toggle", data-onx="mg/dL", data-offx="mmol")
+              //- .panel-heading
+            div.panel.panel-default
+              .panel-heading
+                h4.panel-title
+                  = ' Careportal '
+              .panel-heading
+                label.btn.btn-default
+                  = ' Insulin on board[ '
+                  input.toggle-check(type="checkbox", data-size="mini", data-toggle="toggle", data-onx="mg/dL", data-offx="mmol")
+              .panel-heading
+                label.btn.btn-default
+                  = ' Carbs on board '
+                  input.toggle-check(type="checkbox", data-size="mini", data-toggle="toggle", data-onx="mg/dL", data-offx="mmol")
+              .panel-heading
+                label.btn.btn-default
+                  = ' Bolus wizard preview '
+                  input.toggle-check(type="checkbox", data-size="mini", data-toggle="toggle", data-onx="mg/dL", data-offx="mmol")
+              //- .panel-body
+              ul.list-group
+                li.list-group-item
+                  label.btn.btn-default
+                    = ' Warn '
+                    input.e.env(type="number")
+                  :markdown
+                    When `BWP` is greater than this, trigger warning.
+                li.list-group-item
+                  label.btn.btn-default
+                    = ' Urgent '
+                    input.e.env(type="number")
+                  :markdown
+                    When `BWP` is greater than this, trigger warning.
+                li.list-group-item
+                  label.btn.btn-default
+                    = ' Snooze '
+                    tt
+                      = ' minutes'
+                    input.e.env(type="number")
+                  :markdown
+                    When BG is higher than target high and `BWP` is less than
+                    snooze, alarms will be snoozed this long.
+              .panel-heading
+                .panel-title
+                  h5
+                    = ' Treatments '
+              .panel-body
+                label.btn.btn-default
+                  = ' Use basal profile '
+                  input.toggle-check(type="checkbox", data-size="mini", data-toggle="toggle", data-on="On", data-off="Off")
+                label.btn.btn-default
+                  = ' Treatment notifications '
+                  input.toggle-check(type="checkbox", data-size="mini", data-toggle="toggle", data-on="On", data-off="Off")
+              .panel-body
+                  label.btn.btn-default
+                    = ' Treatment snoozes alarms '
+                    input.e.env(type="number")
+                  tt
+                    = ' minutes'
+
+            div.panel.panel-default
+              .panel-heading
+                h4.panel-title Alarms
+              .panel-body
+                :markdown
+                  Alarms are very configurable, here's an advanced configuration menu.
+                label.btn.btn-default
+                  = ' Urgent high alarms '
+                  input.toggle-check(type="checkbox", checked="checked", data-size="mini", data-toggle="toggle", data-on="On", data-off="Off")
+                label.btn.btn-default
+                  = ' High alarms '
+                  input.toggle-check(type="checkbox", checked="checked", data-size="mini", data-toggle="toggle", data-on="On", data-off="Off")
+                label.btn.btn-default
+                  = ' Low alarms '
+                  input.toggle-check(type="checkbox", checked="checked", data-size="mini", data-toggle="toggle", data-on="On", data-off="Off")
+                label.btn.btn-default
+                  = ' Urgent low alarms '
+                  input.toggle-check(type="checkbox", checked="checked", data-size="mini", data-toggle="toggle", data-on="On", data-off="Off")
+                label.btn.btn-default
+                  = ' Time ago warnings '
+                  input.toggle-check(type="checkbox", checked="checked", data-size="mini", data-toggle="toggle", data-on="On", data-off="Off")
+                label.btn.btn-default
+                  = ' Time ago urgent alarms '
+                  input.toggle-check(type="checkbox", checked="checked", data-size="mini", data-toggle="toggle", data-on="On", data-off="Off")
+
+              .panel-body
+                label.btn.btn-default(for="xxxx")
+                  = 'Predictive '
+                  input.toggle-check(id="xxxx", type="checkbox", checked="checked", data-size="mini", data-toggle="toggle", data-onx="mg/dL", data-offx="mmol")
+                label.btn.btn-default(for="xxxx_simple")
+                  = ' Simple '
+                  input.toggle-check(id="xxxx_simple", type="checkbox", data-size="mini", data-toggle="toggle", data-onx="mg/dL", data-offx="mmol")
+
+              .panel-body
+                label.btn.btn-default
+                  = ' Warn when time ago exceeds '
+                  input.e.env.alarm_timeago_warn_mins(type="number")
+                  tt minutes
+                label.btn.btn-default
+                  = ' Urgent alarm when time ago exceeds '
+                  input.e.env.alarm_timeago_urgent_alarm_mins(type="number")
+                  tt minutes
+
+              .panel-body
+                label.btn.btn-default
+                  = ' Custom threshold alarms '
+                  input.toggle-check(type="checkbox", checked="checked", data-size="mini", data-toggle="toggle", data-onx="mg/dL", data-offx="mmol")
+
+              .panel-heading
+                  = ' Custom thresholds '
+              //- .panel-body
+              ul.list-group
+                li.list-group-item
+                  label.btn.btn-default
+                    = ' High BG '
+                    input.e.env(type="number")
+                    tt
+                      = ' mg/dL'
+                li.list-group-item
+                  label.btn.btn-default
+                    = ' Target top BG '
+                    input.e.env(type="number")
+                    tt
+                      = ' mg/dL'
+                li.list-group-item
+                  label.btn.btn-default
+                    = ' Target bottom BG '
+                    input.e.env(type="number")
+                    tt
+                      = ' mg/dL'
+                li.list-group-item
+                  label.btn.btn-default
+                    = ' Low BG '
+                    input.e.env(type="number")
+                    tt
+                      = ' mg/dL'
+
+
+              .panel-heading
+                label.btn.btn-default
+                  = ' Cannula age '
+                  input.toggle-check(type="checkbox", data-size="mini", data-toggle="toggle", data-on="On", data-off="Off")
+              ul.list-group
+                li.list-group-item
+                  label.btn.btn-default
+                    = ' Notifications '
+                    input.toggle-check(type="checkbox", data-size="mini", data-toggle="toggle", data-on="On", data-off="Off")
+                  :markdown
+                    Notify when the time in *hours* since the last site change
+                    indicates upcoming, change, and overdue events.
+                li.list-group-item
+                  label.btn.btn-default
+                    = ' Notify '
+                    input.e.env(type="number")
+                    tt
+                      = ' hours '
+                  :markdown
+                    since last site change that a cannula change is coming
+                    soon.
+                li.list-group-item
+                  label.btn.btn-default
+                    = ' Warn '
+                    input.e.env(type="number")
+                    tt
+                      = ' hours '
+                  :markdown
+                    since last site change that cannula is due to be changed.'
+                li.list-group-item
+                  label.btn.btn-default
+                    = ' Alarm '
+                    input.e.env(type="number")
+                    tt
+                      = ' hours '
+                  :markdown
+                    since last site change that cannula is overdue for
+                    change.'
+
+              //- table.table
+                //- tr
+                  th(colspan="1")
+                    = ''
+                  th
+                    = ''
+                  th
+                    = ''
+                tr
+                  td(colspan="1")
+                  td
+                  td
+
+                tr
+                  td(colspan="3")
+
+
+            div.panel.panel-warning
+              div.panel-body
+                div
+                  button.delete-site.btn.btn-danger.btn-sm
+                    i.fa.fa-trash-o
 
 
           div.tab-pane#Views(role="tabpanel")

@@ -11,7 +11,10 @@
     "respond": "~1.4.2",
     "underscore": "~1.5.2",
     "d3": "~3.5.6",
-    "jquery-qrcode": "https://github.com/jeromeetienne/jquery-qrcode.git"
+    "jquery-qrcode": "https://github.com/jeromeetienne/jquery-qrcode.git",
+    "bootstrap-toggle": "~2.2.0",
+    "bootstrap-switch": "~3.3.2",
+    "chosen": "~1.4.2"
   },
   "resolutions": {
     "jquery": "~2.1.4"
