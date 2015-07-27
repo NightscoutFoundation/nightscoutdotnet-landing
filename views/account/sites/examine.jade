@@ -111,7 +111,7 @@ block body
                       | never
                     option
                       | noise
-              div.panel-body
+              //- div.panel-body
                   label.btn.btn-default
                     = ' Enable '
                     select.chosen-select(multiple="multiple", data-placeholder="Enable" )
@@ -150,8 +150,6 @@ block body
                       option
                         | maker
 
-                //- form.form-inline
-                //- div.panel.panel-default
               .panel-footer
                     label.btn.btn-default
                       = 'Units '
@@ -164,22 +162,23 @@ block body
               //- .panel-heading
             div.panel.panel-default
               .panel-heading
-                h4.panel-title
+                label.btn.btn-default
                   = ' Careportal '
-              .panel-heading
+                  input.toggle-check(type="checkbox", data-size="mini", data-toggle="toggle", data-onx="mg/dL", data-offx="mmol")
+              //- .panel-heading
                 label.btn.btn-default
                   = ' Insulin on board[ '
                   input.toggle-check(type="checkbox", data-size="mini", data-toggle="toggle", data-onx="mg/dL", data-offx="mmol")
-              .panel-heading
+              //- .panel-heading
                 label.btn.btn-default
                   = ' Carbs on board '
                   input.toggle-check(type="checkbox", data-size="mini", data-toggle="toggle", data-onx="mg/dL", data-offx="mmol")
-              .panel-heading
+              //- .panel-heading
                 label.btn.btn-default
                   = ' Bolus wizard preview '
                   input.toggle-check(type="checkbox", data-size="mini", data-toggle="toggle", data-onx="mg/dL", data-offx="mmol")
               //- .panel-body
-              ul.list-group
+              //- ul.list-group
                 li.list-group-item
                   label.btn.btn-default
                     = ' Warn '
@@ -201,18 +200,18 @@ block body
                   :markdown
                     When BG is higher than target high and `BWP` is less than
                     snooze, alarms will be snoozed this long.
-              .panel-heading
+              //- .panel-heading
                 .panel-title
                   h5
                     = ' Treatments '
-              .panel-body
+              //- .panel-body
                 label.btn.btn-default
                   = ' Use basal profile '
                   input.toggle-check(type="checkbox", data-size="mini", data-toggle="toggle", data-on="On", data-off="Off")
                 label.btn.btn-default
                   = ' Treatment notifications '
                   input.toggle-check(type="checkbox", data-size="mini", data-toggle="toggle", data-on="On", data-off="Off")
-              .panel-body
+              //- .panel-body
                   label.btn.btn-default
                     = ' Treatment snoozes alarms '
                     input.e.env(type="number")
@@ -222,27 +221,6 @@ block body
             div.panel.panel-default
               .panel-heading
                 h4.panel-title Alarms
-              .panel-body
-                :markdown
-                  Alarms are very configurable, here's an advanced configuration menu.
-                label.btn.btn-default
-                  = ' Urgent high alarms '
-                  input.toggle-check(type="checkbox", checked="checked", data-size="mini", data-toggle="toggle", data-on="On", data-off="Off")
-                label.btn.btn-default
-                  = ' High alarms '
-                  input.toggle-check(type="checkbox", checked="checked", data-size="mini", data-toggle="toggle", data-on="On", data-off="Off")
-                label.btn.btn-default
-                  = ' Low alarms '
-                  input.toggle-check(type="checkbox", checked="checked", data-size="mini", data-toggle="toggle", data-on="On", data-off="Off")
-                label.btn.btn-default
-                  = ' Urgent low alarms '
-                  input.toggle-check(type="checkbox", checked="checked", data-size="mini", data-toggle="toggle", data-on="On", data-off="Off")
-                label.btn.btn-default
-                  = ' Time ago warnings '
-                  input.toggle-check(type="checkbox", checked="checked", data-size="mini", data-toggle="toggle", data-on="On", data-off="Off")
-                label.btn.btn-default
-                  = ' Time ago urgent alarms '
-                  input.toggle-check(type="checkbox", checked="checked", data-size="mini", data-toggle="toggle", data-on="On", data-off="Off")
 
               .panel-body
                 label.btn.btn-default(for="xxxx")
@@ -252,56 +230,86 @@ block body
                   = ' Simple '
                   input.toggle-check(id="xxxx_simple", type="checkbox", data-size="mini", data-toggle="toggle", data-onx="mg/dL", data-offx="mmol")
 
-              .panel-body
-                label.btn.btn-default
-                  = ' Warn when time ago exceeds '
-                  input.e.env.alarm_timeago_warn_mins(type="number")
-                  tt minutes
-                label.btn.btn-default
-                  = ' Urgent alarm when time ago exceeds '
-                  input.e.env.alarm_timeago_urgent_alarm_mins(type="number")
-                  tt minutes
-
-              .panel-body
-                label.btn.btn-default
-                  = ' Custom threshold alarms '
-                  input.toggle-check(type="checkbox", checked="checked", data-size="mini", data-toggle="toggle", data-onx="mg/dL", data-offx="mmol")
-
               .panel-heading
-                  = ' Custom thresholds '
-              //- .panel-body
-              ul.list-group
-                li.list-group-item
-                  label.btn.btn-default
-                    = ' High BG '
-                    input.e.env(type="number")
-                    tt
+                  = ' Time ago  '
+              .panel-body
+                .row
+                  .input-group
+                    p.input-group-addon
+                      = ' Warn when time ago exceeds '
+                    input.form-control.e.env.alarm_timeago_warn_mins(type="number")
+                    span.input-group-addon
+                      tt minutes
+                    span.input-group-addon
+                      input.toggle-check(type="checkbox", checked="checked", data-size="mini", data-toggle="toggle", data-on="alarm", data-off="do nothing")
+                  .input-group
+                    p.input-group-addon
+                      = ' Urgent alarm when time ago exceeds '
+                    input.form-control.e.env.alarm_timeago_urgent_alarm_mins(type="number")
+                    span.input-group-addon
+                      tt minutes
+                    span.input-group-addon
+                      input.toggle-check(type="checkbox", checked="checked", data-size="mini", data-toggle="toggle", data-on="alarm", data-off="do nothing")
+
+              .panel-footer
+                //- = ' Custom thresholds '
+                //- .panel-body
+                label.btn.btn-default
+                  = ' Custom thresholds  '
+                  input.toggle-check(type="checkbox", checked="checked", data-size="mini", data-toggle="toggle", data-on="alarm", data-off="display")
+
+              table
+                tr
+                  td
+                    label.btn.btn-default.form-control
+                      = ' High BG '
+                  td.input-group
+                    input.e.env.form-control(type="number", size="100", maxlength="3")
+                    span.input-group-addon
                       = ' mg/dL'
-                li.list-group-item
-                  label.btn.btn-default
-                    = ' Target top BG '
-                    input.e.env(type="number")
-                    tt
+                    span.input-group-addon
+                      input.toggle-check(type="checkbox", data-size="mini", data-toggle="toggle", data-on="Urgent alarm", data-off="Display")
+
+                tr
+                  td
+                    label.btn.btn-default.form-control
+                      = ' Target top '
+                  td.input-group
+                    input.e.env.form-control(type="number", size="100", maxlength="3")
+                    span.input-group-addon
                       = ' mg/dL'
-                li.list-group-item
-                  label.btn.btn-default
-                    = ' Target bottom BG '
-                    input.e.env(type="number")
-                    tt
+                    span.input-group-addon
+                      input.toggle-check(type="checkbox", data-size="mini", data-toggle="toggle", data-on="Urgent alarm", data-off="Display")
+
+                tr
+                  td
+                    label.btn.btn-default.form-control
+                      = ' Target bottom '
+                  td.input-group
+                    input.e.env.form-control(type="number", size="100", maxlength="3")
+                    span.input-group-addon
                       = ' mg/dL'
-                li.list-group-item
-                  label.btn.btn-default
-                    = ' Low BG '
-                    input.e.env(type="number")
-                    tt
+                    span.input-group-addon
+                      input.toggle-check(type="checkbox", data-size="mini", data-toggle="toggle", data-on="Urgent alarm", data-off="Display")
+
+                tr
+                  td
+                    label.btn.btn-default.btn.form-control
+                      = ' Low BG '
+                  td.input-group
+                    input.e.env.form-control(type="number", size="100", maxlength="3")
+                    span.input-group-addon
                       = ' mg/dL'
+                    span.input-group-addon
+                      input.toggle-check(type="checkbox", data-size="mini", data-toggle="toggle", data-on="Urgent alarm", data-off="Display")
 
 
-              .panel-heading
+
+              //- .panel-heading
                 label.btn.btn-default
                   = ' Cannula age '
                   input.toggle-check(type="checkbox", data-size="mini", data-toggle="toggle", data-on="On", data-off="Off")
-              ul.list-group
+              //- ul.list-group
                 li.list-group-item
                   label.btn.btn-default
                     = ' Notifications '
