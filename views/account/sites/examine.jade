@@ -61,7 +61,7 @@ block body
     div.col-xs-9
         .tab-content
 
-          div.tab-pane.active#Overview(role="tabpanel")
+          div.tab-pane.active#Overview(role="tabpanel", data-ajax-target='./#{name}/runtime')
             h4
               i.fa.fa-home
               = ' Overview'
@@ -90,26 +90,26 @@ block body
               .panel-body
                 label.btn.btn-default
                   = ' Custom title '
-                  input.e.env.custom_title(type="text", name="CUSTOM_TITLE")
+                  input.e.env.CUSTOM_TITLE(type="text", name="CUSTOM_TITLE")
               .panel-body
                 label.btn.btn-default
                   = ' Time format '
-                  input.toggle-check(type="checkbox", checked="checked", data-size="mini", data-toggle="toggle", data-on="12", data-off="24")
+                  input.binary-data-label.e.env.TIME_FORMAT.toggle-check(type="checkbox", checked="checked", data-size="mini", data-toggle="toggle", data-on="12", data-off="24", name="TIME_FORMAT")
                 label.btn.btn-default
                   = ' Theme '
-                  input.toggle-check(type="checkbox", checked="checked", data-size="mini", data-toggle="toggle", data-on="default", data-off="colors")
+                  input.binary-data-label.e.env.THEME.toggle-check(type="checkbox", checked="checked", data-size="mini", data-toggle="toggle", data-on="default", data-off="colors", name="THEME")
                 label.btn.btn-default
                   = ' Nightmode '
-                  input.toggle-check(type="checkbox", data-size="mini", data-toggle="toggle", data-on="On", data-off="Off")
+                  input.e.env.NIGHT_MODE.binary-data-label.toggle-check(type="checkbox", data-size="mini", data-toggle="toggle", data-on="On", data-off="Off", name="NIGHT_MODE")
               div.panel-body
                 label.btn.btn-default
                   = ' Show raw data  '
-                  select.e.env.show_rawbg.chosen-select(data-placeholder="Enable" , data-width="48%")
-                    option(selected="selected")
+                  select.e.env.SHOW_RAWBG.chosen-select(data-placeholder="Enable", data-width="48%", name="SHOW_RAWBG")
+                    option(selected="selected", value="always")
                       | always
-                    option
+                    option(value="never")
                       | never
-                    option
+                    option(value="noise")
                       | noise
               //- div.panel-body
                   label.btn.btn-default
@@ -153,7 +153,7 @@ block body
               .panel-footer
                     label.btn.btn-default
                       = 'Units '
-                      input.toggle-check(type="checkbox", checked="checked", data-size="mini", data-toggle="toggle", data-on="mg/dL", data-off="mmol")
+                      input.binary-data-label.e.env.DISPLAY_UNITS.toggle-check(type="checkbox", checked="checked", data-size="mini", data-toggle="toggle", data-on="mg/dL", data-off="mmol", name="DISPLAY_UNITS")
             //- div.panel.panel-default
               //- .panel-heading
                   label.btn.btn-default
@@ -164,7 +164,7 @@ block body
               .panel-heading
                 label.btn.btn-default
                   = ' Careportal '
-                  input.toggle-check(type="checkbox", data-size="mini", data-toggle="toggle", data-onx="mg/dL", data-offx="mmol")
+                  input.enabler.enable_careportal.toggle-check(type="checkbox", data-size="mini", data-toggle="toggle", data-onx="mg/dL", data-offx="mmol", value="careportal")
               //- .panel-heading
                 label.btn.btn-default
                   = ' Insulin on board[ '
@@ -222,13 +222,13 @@ block body
               .panel-heading
                 h4.panel-title Alarms
 
-              .panel-body
+              .panel-body.configure_alarms
                 label.btn.btn-default(for="xxxx")
                   = 'Predictive '
-                  input.toggle-check(id="xxxx", type="checkbox", checked="checked", data-size="mini", data-toggle="toggle", data-onx="mg/dL", data-offx="mmol")
+                  input.alarm_type.enable_predict.toggle-check(id="xxxx", type="checkbox", checked="checked", data-size="mini", data-toggle="toggle", data-onx="mg/dL", data-offx="mmol", value="predict")
                 label.btn.btn-default(for="xxxx_simple")
                   = ' Simple '
-                  input.toggle-check(id="xxxx_simple", type="checkbox", data-size="mini", data-toggle="toggle", data-onx="mg/dL", data-offx="mmol")
+                  input.alarm_type.enable_simple.toggle-check(id="xxxx_simple", type="checkbox", data-size="mini", data-toggle="toggle", data-onx="mg/dL", data-offx="mmol", value="simple")
 
               .panel-heading
                   = ' Time ago  '
@@ -237,26 +237,26 @@ block body
                   .input-group
                     p.input-group-addon
                       = ' Warn when time ago exceeds '
-                    input.form-control.e.env.alarm_timeago_warn_mins(type="number")
+                    input.form-control.e.env.ALARM_TIMEAGO_WARN_MINS(type="number", name="ALARM_TIMEAGO_WARN_MINS")
                     span.input-group-addon
                       tt minutes
                     span.input-group-addon
-                      input.toggle-check(type="checkbox", checked="checked", data-size="mini", data-toggle="toggle", data-on="alarm", data-off="do nothing")
+                      input.binary-data-on-off.toggle-check.e.env.ALARM_TIMEAGO_WARN(type="checkbox", checked="checked", data-size="mini", data-toggle="toggle", data-on="alarm", data-off="do nothing", name="ALARM_TIMEAGO_WARN")
                   .input-group
                     p.input-group-addon
                       = ' Urgent alarm when time ago exceeds '
-                    input.form-control.e.env.alarm_timeago_urgent_alarm_mins(type="number")
+                    input.form-control.e.env.ALARM_TIMEAGO_URGENT_MINS(type="number", name="ALARM_TIMEAGO_URGENT_MINS")
                     span.input-group-addon
                       tt minutes
                     span.input-group-addon
-                      input.toggle-check(type="checkbox", checked="checked", data-size="mini", data-toggle="toggle", data-on="alarm", data-off="do nothing")
+                      input.binary-data-on-off.toggle-check.e.env.ALARM_TIMEAGO_URGENT(type="checkbox", checked="checked", data-size="mini", data-toggle="toggle", data-on="alarm", data-off="do nothing", name="ALARM_TIMEAGO_URGENT")
 
               .panel-footer
                 //- = ' Custom thresholds '
                 //- .panel-body
                 label.btn.btn-default
                   = ' Custom thresholds  '
-                  input.toggle-check(type="checkbox", checked="checked", data-size="mini", data-toggle="toggle", data-on="alarm", data-off="display")
+                  input.toggle-check.enabler.enable_simplealarms.e.env.ENABLED_SIMPLEALARMS(type="checkbox", checked="checked", data-size="mini", data-toggle="toggle", data-on="alarm", data-off="display", value="simplealarms")
 
               table
                 tr
@@ -264,10 +264,10 @@ block body
                     label.btn.btn-default.form-control
                       = ' High BG '
                   td.input-group
-                    input.e.env.form-control(type="number", size="100", maxlength="3")
+                    input.e.env.BG_HIGH.form-control(type="number", size="100", maxlength="3", name="BG_HIGH")
                     span.input-group-addon
                       = ' mg/dL'
-                    span.input-group-addon
+                    //- span.input-group-addon
                       input.toggle-check(type="checkbox", data-size="mini", data-toggle="toggle", data-on="Urgent alarm", data-off="Display")
 
                 tr
@@ -275,10 +275,10 @@ block body
                     label.btn.btn-default.form-control
                       = ' Target top '
                   td.input-group
-                    input.e.env.form-control(type="number", size="100", maxlength="3")
+                    input.e.env.BG_TARGET_TOP.form-control(type="number", size="100", maxlength="3", name="BG_TARGET_TOP")
                     span.input-group-addon
                       = ' mg/dL'
-                    span.input-group-addon
+                    //- span.input-group-addon
                       input.toggle-check(type="checkbox", data-size="mini", data-toggle="toggle", data-on="Urgent alarm", data-off="Display")
 
                 tr
@@ -286,10 +286,10 @@ block body
                     label.btn.btn-default.form-control
                       = ' Target bottom '
                   td.input-group
-                    input.e.env.form-control(type="number", size="100", maxlength="3")
+                    input.e.env.BG_TARGET_BOTTOM.form-control(type="number", size="100", maxlength="3", name="BG_TARGET_BOTTOM")
                     span.input-group-addon
                       = ' mg/dL'
-                    span.input-group-addon
+                    //- span.input-group-addon
                       input.toggle-check(type="checkbox", data-size="mini", data-toggle="toggle", data-on="Urgent alarm", data-off="Display")
 
                 tr
@@ -297,10 +297,10 @@ block body
                     label.btn.btn-default.btn.form-control
                       = ' Low BG '
                   td.input-group
-                    input.e.env.form-control(type="number", size="100", maxlength="3")
+                    input.e.env.BG_LOW.form-control(type="number", size="100", maxlength="3", name="BG_LOW")
                     span.input-group-addon
                       = ' mg/dL'
-                    span.input-group-addon
+                    //- span.input-group-addon
                       input.toggle-check(type="checkbox", data-size="mini", data-toggle="toggle", data-on="Urgent alarm", data-off="Display")
 
 

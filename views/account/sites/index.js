@@ -105,6 +105,15 @@ exports.deleteView = function (req, res, next) {
   });
 };
 
+exports.jsonIfXHR = function (req, res, next) {
+  if (req.xhr) {
+    res.set('json');
+    res.set('Content-Type', 'application/json');
+  }
+
+  next( );
+};
+
 exports.findSite = function (req, res, next) {
   var bases = get_bases(req);
   var q = {
@@ -126,6 +135,129 @@ exports.findSite = function (req, res, next) {
     var site = [sites].map(sitePrefixes(bases)).pop( );
     req.site = site;
     return next( );
+  });
+};
+
+var blacklistedENV = [null, 'HOSTEDPORTS', 'MONGO_COLLECTION', 'MONGO_DEVICESTATUS_COLLECTION', 'MONGO_PROFILE_COLLECTION', 'MONGO_SETTINGS_COLLECTION', 'MONGO_TREATMENTS_COLLECTION', 'PATH', 'WEB_NAME', 'WORKER_DIR', 'WORKER_ENV', 'base', 'envfile', 'mongo', 'internal_name', 'PORT'  ];
+exports.getRunTime = function (req, res, next) {
+  var account_id = req.user.roles.account._id;
+  var api = req.app.config.proxy.api;
+  var url = api + '/environs/' + req.site.internal_name;
+  // var api = req.app.config.proxy.provision;
+  // var url = api + '/accounts/' + account_id + '/sites/' + req.site.internal_name;
+  request.get({ url: url, json: true }, function done (err, result, body) {
+    if (err) { return next(err); }
+    var safe = { };
+    var env = body.custom_env;
+    for (var f in env) {
+      if (blacklistedENV.indexOf(f) < 1) {
+        safe[f] = env[f];
+      }
+    }
+    body.custom_env = safe;
+
+    req.site.proc = body;
+    next( );
+  });
+};
+
+exports.clean_proc_runtime = function clean_proc_runtime (req, res, next) {
+  if (req.site && req.site.proc && req.site.proc.custom_env) {
+    var body = req.site.proc;
+    var safe = { };
+    var env = body.custom_env;
+    for (var f in env) {
+      if (blacklistedENV.indexOf(f) < 1) {
+        safe[f] = env[f];
+      }
+    }
+    body.custom_env = safe;
+
+    req.site.proc = body;
+  }
+  next( );
+}
+
+exports.getRunTimeOption = function (req, res, next) {
+  var field = req.params.field;
+  res.json(req.site.proc[field]);
+};
+
+exports.suggestRunTimeOption = function (req, res, next) {
+  var update = { };
+  update[req.params.field] = req.params[req.params.field];
+  req.suggested = update;
+  next( );
+};
+
+exports.setRunTimeOption = function (req, res, next) {
+  var api = req.app.config.proxy.api;
+  var field = req.params.field;
+  var url = api + '/environs/' + req.site.internal_name + '/env/' + field;
+  var value = req.params[field] || req.body[field];
+  var update = { };
+  update[field] = value;
+  request.post({ url: url, json: update }, function done (err, result, body) {
+    if (err) { return next(err); }
+    console.log(update, body);
+    var refresh = api + result.headers['location'];
+    request.get({url: refresh, json: true }, function finish (err, resp, body) {
+      if (err) { return next(err); }
+      req.site.proc = body;
+      next( );
+    });
+  });
+};
+
+exports.delRunTimeOption = function (req, res, next) {
+  var api = req.app.config.proxy.api;
+  var field = req.params.field;
+  var url = api + '/environs/' + req.site.internal_name + '/env/' + field;
+  request.del({ url: url, json: true }, function done (err, result, body) {
+    if (err) { return next(err); }
+    var refresh = api + result.headers('Location');
+    request.get({url: refresh, json: true }, function finish (err, resp, body) {
+      if (err) { return next(err); }
+      req.site.proc = body;
+      next( );
+    });
+  });
+};
+
+exports.suggestRunTime = function (req, res, next) {
+  var env = req.params.env;
+  var existing = req.site.proc.custom_env;
+  var patch_env = { };
+  for (x in env) {
+    existing[x] = env[x];
+    patch_env[x] = env[x];
+  }
+  req.patch_env = patch_env;
+  req.suggested = existing;
+  next( );
+};
+
+exports.setRunTime = function (req, res, next) {
+
+  var api = req.app.config.proxy.api;
+  var url = api + '/environs/' + req.site.internal_name;
+  var payload = req.suggested;
+  request.post({ url: url, json: payload }, function done (err, result, body) {
+    if (err) { return next(err); }
+    var refresh = api + result.headers('Location');
+    request.get({url: refresh, json: true }, function finish (err, resp, body) {
+      if (err) { return next(err); }
+      req.site.proc = body;
+      next( );
+    });
+  });
+};
+
+exports.fmtRunTime = function (req, res, next) {
+  res.format({
+    json: function ( ) {
+      res.json(req.site.proc);
+    }
   });
 };
 

@@ -187,12 +187,18 @@ exports = module.exports = function(app, passport) {
 
   // account > sites
   var sites = require('./views/account/sites/index');
-  app.get('/account/sites/', sites.init);
+  app.get('/account/sites/', sites.jsonIfXHR, sites.init);
   app.post('/account/sites/', sites.create);
   app.delete('/account/sites/:name', sites.remove);
   app.get('/account/sites/list.json', sites.list);
   app.get('/account/sites/:name', sites.examine);
-  app.get('/account/sites/:name/views', sites.findSite, sites.listView);
+  app.get('/account/sites/:name/views', sites.jsonIfXHR, sites.findSite, sites.listView);
+  app.get('/account/sites/:name/runtime', sites.findSite, sites.getRunTime, sites.fmtRunTime);
+  app.post('/account/sites/:name/runtime', sites.findSite, sites.getRunTime, sites.suggestRunTime, sites.setRunTime, sites.clean_proc_runtime, sites.fmtRunTime);
+  app.get('/account/sites/:name/runtime', sites.findSite, sites.getRunTime, sites.fmtRunTime);
+  app.get('/account/sites/:name/runtime/:field', sites.findSite, sites.getRunTime, sites.getRunTimeOption, sites.fmtRunTime);
+  app.post('/account/sites/:name/runtime/:field', sites.findSite, sites.getRunTime,  sites.setRunTimeOption, sites.clean_proc_runtime, sites.fmtRunTime);
+  app.delete('/account/sites/:name/runtime/:field', sites.findSite, sites.getRunTime, sites.delRunTimeOption, sites.clean_proc_runtime, sites.fmtRunTime);
   app.post('/account/sites/:name/views', sites.findSite, sites.createView);
   app.delete('/account/sites/:name/views/:viewName', sites.findSite, sites.deleteView);
 

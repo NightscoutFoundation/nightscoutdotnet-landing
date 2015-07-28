@@ -68,6 +68,58 @@
     return clone;
   }
 
+  function fill_editor (dom, item) {
+    var prefix = '.e.env';
+    var f;
+    for (f in item) {
+      console.log(f);
+      dom.find(prefix + '.' + f).not(':input').text(item[f]);
+      dom.find(prefix + '.' + f).filter('input').not(':checkbox, select').val(item[f]);
+      dom.find(prefix + '.' + f).filter('select').val(item[f]).trigger('chosen:updated');
+      // console.log(dom.find(prefix + '.' + f), dom.find(prefix + '.' + f).filter('.data-binary-label'));
+      dom.find(prefix + '.' + f).filter('.binary-data-label').each(function ( ) {
+        var val = item[f];
+        var elem = $(this);
+        console.log('filling', elem, val);
+        if (elem.data('on').toString( ).toLowerCase( ) == val.toLowerCase( )) {
+          elem.attr('checked', 'checked').trigger('change');
+        } else {
+          elem.attr('checked', null).trigger('change');
+        }
+      });
+      dom.find(prefix + '.' + f).filter('.binary-data-on-off').each(function ( ) {
+        var val = item[f];
+        var elem = $(this);
+        if (val.toLowerCase( ) == 'on') {
+          elem.attr('checked', 'checked').trigger('change');
+        } else {
+          elem.attr('checked', null).trigger('change');
+        }
+      });
+
+    }
+    for (f in item) {
+      dom.find('A' + prefix + '.' + f).not(':input').attr('href', item[f + '-href']);
+    }
+    var enabled = (item.ENABLE || '').split(' ');
+    if (enabled) {
+      dom.find('.enabler').attr('checked', null).trigger('change');
+      for (f in enabled) {
+        console.log(f, enabled[f]);
+        dom.find('.enabler' + '.enable_' + enabled[f]).prop('checked', 'checked').trigger('change');
+        // dom.find('.enabler' + '.enable_' + enabled[f]).bootstrapSwitch('setState', 
+      }
+    }
+    var enabled = (item.ALARM_TYPES || 'predict').split(' ');
+    if (enabled) {
+      dom.find('.alarm_type').prop('checked', null).trigger('change');
+      for (f in enabled) {
+        dom.find('.alarm_type' + '.enable_' + enabled[f]).attr('checked', 'checked').trigger('change');
+      }
+    }
+    return dom;
+  }
+
   function delete_view (ev) {
     var row = $(this).closest('.site-row');
     var viewName = row.find('.t.name:first').text( );
@@ -98,6 +150,26 @@
   }
 
   function upload_details (ev) {
+  }
+
+  function env_config (env) {
+    var enabled = [null].concat((env.ENABLE || '').split(' '));
+    var config = { };
+    var known = [
+        'careportal' , 'rawbg' , 'iob' , 'cob'
+      , 'bwp' , 'cage' , 'delta'
+      , 'direction' , 'upbat' , 'ar2'
+      , 'simplealarms' , 'errorcodes' , 'treatmentnotify'
+      , 'basal' , 'pushover' , 'maker'
+      ];
+    var field;
+    for (var i in known) {
+      field = known[i];
+      if (enabled.indexOf(field) > 0) {
+        config[field] = true;
+      }
+    }
+    return config;
   }
 
   $(document).ready(function ( ) {
@@ -152,6 +224,65 @@
         });
       }
 
+    });
+
+    var overview = $('#Overview');
+    overview.on('loaded', function (ev, data) {
+      var api = overview.data('ajax-target');
+      var config = env_config(data.custom_env);
+      data.config = config;
+      console.log("CONFIG", api, config);
+      if (data && data.state) {
+        fill_editor(overview, data);
+        fill_editor(overview, data.custom_env);
+        console.log('updated', overview);
+      }
+      overview.off('change switchChange.bootstrapSwitch')
+        .on('change switchChange.bootstrapSwitch', '.panel :input', data,
+      function (ev, state) {
+        console.log("changing", ev, ev.target);
+        var target = $(ev.target);
+        var name = target.attr('name') || target.data('field-name');
+        console.log('name', name, target.attr('class'), target.val( ), state);
+        var payload = { };
+        payload[name] = target.is('.toggle-check') ? state : target.val( );
+        if (target.is('.binary-data-label')) {
+          console.log(',,', target.data('on'), target.data('off'), target.attr('data-off'));
+          console.log('target binarydata', target, target.attr('data-off'));
+          payload[name] = (state ? target.data('on') : target.data('off')).toString( ).toLowerCase( );
+        }
+        if (target.is('.binary-data-on-off')) {
+          payload[name] = state ? 'on' : 'off';
+        }
+        if (target.is('.alarm_type')) {
+          name = 'ALARM_TYPES';
+          payload = { };
+          var alarms = [ ];
+          target.closest('.configure_alarms').find('.alarm_type:checked').each(function ( ) {
+            alarms.push($(this).val( ));
+          });
+          
+          payload[name] = ' ' + alarms;
+        }
+        if (target.is('.enabler')) {
+          name = 'ENABLE';
+          payload = { };
+          var enabled = ['',  ];
+          overview.find('.enabler:checked').each(function ( ) {
+            enabled.push($(this).val( ));
+          });
+          payload[name] = ' ' + enabled.join(' ');
+        }
+        var url = api + '/' + name;
+        console.log('payload', payload, url);
+        if (name) {
+          $.post(url, payload, function (body, status, xhr) {
+             console.log("SAVED RESULTS!", body, status);
+             overview.trigger('ns.saved', [body]);
+          });
+          
+        }
+      });
     });
     var pebble = $('#Pebble').on('loaded', function (ev, data) {
       var body = pebble.find('.list-group');
