@@ -266,7 +266,6 @@ function do_nginx_rewrite (req, res, next) {
     ORIGIN = '/x-accel-redirectssl/' + 'p5001-backends.diabetes.watch';
   }
   var uri = ORIGIN + '/' + encodeURIComponent(req.url.slice(1));
-  // if (req.session.do_proxy) {
   if (prefix) {
     // console.log("SITES FOR prefix", prefix, req.user.username, req.user.roles.account.sites);
     for (var x in req.user.roles.account.sites) {
@@ -282,32 +281,12 @@ function do_nginx_rewrite (req, res, next) {
     }
     console.log("PROXY FOR HOST", original_host, prefix);
     // console.log('redirecting internally', req.user);
-    if (req.url.indexOf('/logout') === 0) {
-      console.log('logout', req.url);
-      req.session.do_proxy = false;
-      req.session.save( );
-      res.redirect('/logout');
-      return;
-      return next( );
-    }
-    if (req.url.indexOf('/nightscout') === 0) {
-      return res.redirect('/');
-    }
+
     console.log('redirecting', 'to', uri);
     res.header('X-Accel-Redirect', uri)
     res.end( );
+    return;
     // res.send("")
-  } else {
-    if (req.url.indexOf('/nightscout') === 0) {
-      console.log('ns start proxy', req.url);
-      req.session.do_proxy = true;
-      req.session.save( );
-      var url = scheme + "://" + req.user.username + '-' + req.hostname + '/';
-      res.redirect(url);
-      return res.end( );
-      // return next( );
-    }
-    return next( );
   }
   // res.redirect('/');
   return next( );
