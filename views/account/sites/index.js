@@ -452,7 +452,10 @@ exports.create = function(req, res, next) {
       
       // renderSites(req, res, next, '');
       console.log("CREATED NEW SITE!", err, site);
-      res.render('account/sites/index', {user: req.user, site: site, bases: bases });
+      setTimeout(function ( ) {
+        res.redirect('/account/sites/');
+      }, 2500);
+      // res.render('account/sites/index', {user: req.user, site: site, bases: bases });
     });
   });
 
