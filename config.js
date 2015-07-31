@@ -18,8 +18,8 @@ exports.port = process.env.PORT || 3000;
 exports.mongodb = {
   uri: process.env.MONGOLAB_URI || process.env.MONGOHQ_URL || 'mongodb://localhost/drywall'
 };
-exports.companyName = process.env.COMPANY_NAME || 'Acme, Inc.';
-exports.projectName = process.env.PROJECT_NAME || 'Drywall';
+exports.companyName = decodeURIComponent(process.env.COMPANY_NAME) || 'Acme, Inc.';
+exports.projectName = decodeURIComponent(process.env.PROJECT_NAME) || 'Drywall';
 exports.systemEmail = process.env.SMTP_FROM_ADDRESS || 'your@email.addy';
 exports.cryptoKey = 'k3f1ng3rp1n';
 exports.loginAttempts = {
