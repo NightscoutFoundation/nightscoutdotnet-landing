@@ -1,0 +1,61 @@
+
+extends ../../../layouts/account
+
+block head
+  title Billing
+
+block feet
+  //- script(src='/views/account/sites/index.min.js?#{cacheBreaker}')
+  script(src='/vendor/d3/d3.min.js')
+  script(src='/views/account/billing/index.js?#{cacheBreaker}')
+  script(src='https://js.braintreegateway.com/v2/braintree.js')
+
+  script(type='text/javascript').
+      var clientToken = "#{payment_token}";
+      braintree.setup(clientToken, 'dropin', {
+        container: 'payment-form'
+      })
+    
+
+block body
+  div.row
+    div.col-sm-12
+      div.page-header
+        h1 Billing
+  div.row
+    form#checkout(method="POST", action="paid")
+      table.table(data-ajax-target="plans")
+        tbody.plan-list
+          tr
+            th
+              | Plan
+            th
+              | Price
+            th
+              = ' '
+            th
+              = ' '
+        tbody.template.hidden
+          tr
+            td
+              span.p.name
+                | name
+            td
+              span.p.price
+                | $$
+            td
+              span.p.description
+                | desc
+            td
+              span.p.select_plan
+                label.btn
+                  span.plan.upgrade
+                    | Upgrade
+                  span.plan.selected
+                    | Selected
+                  span.plan.downgrade
+                    | Downgrade
+                  input.p.plan_id(type="radio", name="plan_id", value="")
+      #payment-form
+      button.btn.btn-primary(type="button")
+        | Subscribe

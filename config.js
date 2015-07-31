@@ -36,6 +36,7 @@ exports.proxy = {
     GUEST: process.env['PROXY_PREFIX_GUEST'] || '-guest.nightscout.net'
   },
   api: process.env['MULTIENV_API'] || 'http://localhost:3434',
+  billing: process.env['BILLING_API'] || 'http://localhost:6161',
   provision: process.env['PROVISION_API'] || 'http://localhost:6060' // provision.docker:6060
 }
 exports.mqtt = {

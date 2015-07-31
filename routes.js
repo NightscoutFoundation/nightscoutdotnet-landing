@@ -185,6 +185,29 @@ exports = module.exports = function(app, passport) {
   app.put('/account/settings/identity/', require('./views/account/settings/index').identity);
   app.put('/account/settings/password/', require('./views/account/settings/index').password);
 
+  // billing
+  var billing = require('./views/account/billing/index');
+  app.get('/account/billing/'
+    , billing.jsonIfXHR
+    , billing.set_bases
+    , billing.fetch_payment_token
+    , billing.renderPhase
+  ) ;
+  app.get('/account/billing/plans'
+    , billing.set_bases
+    , billing.jsonIfXHR, billing.fetch_plans
+    , billing.fmt_plans
+  ) ;
+  app.post('/account/billing/paid'
+    , billing.jsonIfXHR
+    , billing.set_bases
+    , billing.fetch_plans
+    , billing.suggest_subscription
+    , billing.create_subscription
+    , billing.fmt_subscription
+  ) ;
+
+
   // account > sites
   var sites = require('./views/account/sites/index');
   app.get('/account/sites/', sites.jsonIfXHR, sites.init);
