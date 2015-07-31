@@ -9,9 +9,9 @@ env
 # export PORT=4747
 
 # erb nginx.conf.erb | tee /etc/nginx/nginx.conf
-service nginx restart
+# service nginx restart
 
 # install and run
 npm install
-node server.js
+npm start
 
