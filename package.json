@@ -9,6 +9,9 @@
     "postinstall": "npm install -g grunt-cli ; ./node_modules/.bin/bower install --allow-root ; grunt build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "engines": {
+    "node": "0.12.x"
+  },
   "author": "",
   "dependencies": {
     "async": "^0.9.0",
