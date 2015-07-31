@@ -11,7 +11,7 @@ html
       div.container
         div.navbar-header
           a.navbar-brand(href='/')
-            img.navbar-logo(src='/media/logo-symbol-64x64.png')
+            img.navbar-logo(src='/nsimages/NFlogo-small.png')
             span.navbar-brand-label #{projectName}
           button.navbar-toggle.collapsed(data-toggle='collapse', data-target='.my-navbar-collapse')
             span.icon-bar
@@ -23,6 +23,7 @@ html
             li: a(href='/about/') About
             li: a(href='/signup/') Sign Up
             li: a(href='/contact/') Contact
+			li: a(href='http://www.nightscoutfoundation.org/donate/') Donate
           ul.nav.navbar-nav.navbar-right
             if user && user.username
               li: a(href='#{user.defaultReturnUrl}')
