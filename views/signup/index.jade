@@ -46,14 +46,24 @@ block body
             a.btn.btn-info(href='/signup/tumblr/')
               i.fa.fa-tumblr-square.fa-lg
               |  Tumblr
-    div.col-sm-6.marketing
-      div.page-header
-        h1 Please read!
-      p.lead By signing up for Nightscout with Nightscout.net, you understand that:
-	  p This site should be used for educational informational purposes only. Do not use this information to make medical decisions.
-	  p This is a beta service. It may and will go down occasionally, and data may be lost.
-	  p We make all reasonable attempts at privacy, but this site may not be HIPAA compliant.
-	  p You are contributing to testing at this point, and your anonymized data may be used in imagery.
+
+
+
+    //- div.col-sm-6
+      .page-header
+        h2 Notice
+      div
+        :markdown
+          By signing up for Nightscout with Nightscout.net, you understand
+          that:
+          * This site should be used for educational informational purposes
+            only. Do not use this information to make medical decisions.
+          * This is a beta service. It may and will go down occasionally, and
+            data may be lost.
+          * We make all reasonable attempts at privacy, but this site may not
+            be HIPAA compliant.
+          * You are contributing to testing at this point, and your anonymized
+            data may be used in imagery.
       
 
   script(type='text/template', id='tmpl-signup')
