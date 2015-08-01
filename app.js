@@ -282,7 +282,7 @@ function do_nginx_rewrite (req, res, next) {
       }
     }
     if (!found) {
-      return next( );
+      return res.redirect(scheme + "://" + req.app.config.proxy.PREFIX.VIEWER.split('-').pop( ) + '/');
     }
     console.log("PROXY FOR HOST", original_host, prefix);
     // console.log('redirecting internally', req.user);
