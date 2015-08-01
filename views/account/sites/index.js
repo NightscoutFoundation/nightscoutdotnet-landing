@@ -348,7 +348,7 @@ exports.remove = function(req, res, next) {
   , account: { id: req.user.roles.account._id },
   };
   console.log('removing', name, 'from backend', delete_url);
-  request.del(delete_url, function done (err, result, body) {
+  request.del({url: delete_url, json: true}, function done (err, result, body) {
     if (err) {
       return next(err);
     }

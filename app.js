@@ -268,16 +268,21 @@ function do_nginx_rewrite (req, res, next) {
   var uri = ORIGIN + '/' + encodeURIComponent(req.url.slice(1));
   if (prefix) {
     // console.log("SITES FOR prefix", prefix, req.user.username, req.user.roles.account.sites);
+    var found = false;
     for (var x in req.user.roles.account.sites) {
       var site = req.user.roles.account.sites[x];
       if (site.name == prefix) {
         console.log('changing prefix', prefix, site.internal_name);
         prefix = site.internal_name;
+        found = true;
         var backend_prefix = req.app.config.proxy.PREFIX.BACKENDS;
         uri = '/x-accel-redirectssl/u-' + prefix + backend_prefix + '/' + encodeURIComponent(req.url.slice(1));
         // console.log('MATCHING SITE', prefix, uri, site);
         break;
       }
+    }
+    if (!found) {
+      return next( );
     }
     console.log("PROXY FOR HOST", original_host, prefix);
     // console.log('redirecting internally', req.user);
