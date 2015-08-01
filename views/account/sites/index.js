@@ -204,7 +204,9 @@ exports.setRunTimeOption = function (req, res, next) {
     request.get({url: refresh, json: true }, function finish (err, resp, body) {
       if (err) { return next(err); }
       req.site.proc = body;
-      next( );
+      setTimeout(function ( ) {
+        next( );
+      }, 2500);
     });
   });
 };
