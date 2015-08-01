@@ -249,7 +249,7 @@ function do_nginx_rewrite (req, res, next) {
     console.log('SKIPPING PROXY sending to next');
     if (prefix) {
       // console.log('on invalid prefix', prefix);
-      var url = scheme + "://" + req.hostname;
+      var url = scheme + "://" + req.app.config.proxy.PREFIX.LOGIN;
       // console.log('sending', url);
       res.redirect(url);
       return res.end( );
@@ -282,7 +282,7 @@ function do_nginx_rewrite (req, res, next) {
       }
     }
     if (!found) {
-      return res.redirect(scheme + "://" + req.app.config.proxy.PREFIX.VIEWER.split('-').pop( ) + '/');
+      return res.redirect(scheme + "://" + req.app.config.proxy.PREFIX.LOGIN.split('-').pop( ) + '/');
     }
     console.log("PROXY FOR HOST", original_host, prefix);
     // console.log('redirecting internally', req.user);
