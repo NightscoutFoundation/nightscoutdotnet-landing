@@ -170,6 +170,9 @@ function removePrefix (req, res, next) {
 
 function do_guest_rewrite (req, res, next) {
   var original_host = req.headers['x-forwarded-host'] || req.hostname;
+  if (!original_host) {
+    console.log('MISSING HOST', req.hostname, req.headers);
+  }
   var pat = req.app.config.proxy.PREFIX.GUEST;
   var prefix = original_host.split(pat).slice(0, -1).join("");
   var tail = original_host.split(pat).slice(1).join("");
@@ -199,6 +202,9 @@ function do_guest_rewrite (req, res, next) {
 // this function intercepts almost all requests to nginx
 function do_uploader_rewrite (req, res, next) {
   var original_host = req.headers['x-forwarded-host'] || req.hostname;
+  if (!original_host) {
+    return next( );
+  }
   var pat = '-u' + req.app.config.cookie.domain;
   var prefix = original_host.split(pat).slice(0, -1).join("");
   var scheme = req.headers['x-forwarded-proto'] || 'https';
@@ -225,6 +231,7 @@ function do_uploader_rewrite (req, res, next) {
           prefix = site.internal_name;
           var backend_prefix = req.app.config.proxy.PREFIX.BACKENDS;
           url = '/x-accel-redirectssl/u-' + prefix + backend_prefix + '/' + encodeURIComponent(req.url.slice(1));
+          console.log('UPLOAD', url);
           res.header('API-SECRET', api_secret);
           res.header('X-Accel-Redirect', url);
           res.end( );
