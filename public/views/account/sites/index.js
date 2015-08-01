@@ -305,7 +305,8 @@
       var uris = {
         mqtt: button.find('A.mqtt-upload').attr('href')
       , rest: button.find('A.http-upload').attr('href')
-      , xdrip: button.find('A.http-xdrip-upload').attr('href')
+      , v1: button.find('A.http-upload').attr('href') + '/'
+      , xdrip: button.find('A.http-xdrip-upload').attr('href') + '/'
       };
       var json;
       json = {mqtt: { uri: uris.mqtt }};
@@ -314,6 +315,10 @@
       json = {rest: { endpoint: [uris.rest] } };
       $('#http-upload-qr .code').empty( ).qrcode(JSON.stringify(json));
       $('#http-upload-qr .uri').empty( ).text(uris.rest);
+      json = {rest: { endpoint: [uris.v1] } };
+      console.log('HEy', json);
+      $('#http-xdrip-beta-upload-qr .code').empty( ).qrcode(JSON.stringify(json));
+      $('#http-xdrip-beta-upload-qr .uri').empty( ).text(uris.v1);
       json = {rest: { endpoint: [uris.xdrip] } };
       $('#http-xdrip-upload-qr .code').empty( ).qrcode(JSON.stringify(json));
       $('#http-xdrip-upload-qr .uri').empty( ).text(uris.xdrip);
