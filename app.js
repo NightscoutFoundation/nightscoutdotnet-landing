@@ -215,6 +215,7 @@ function do_uploader_rewrite (req, res, next) {
         };
         // console.log('find site with', q);
         req.app.db.models.Site.findOne(q, function (err, site) {
+          if (err) { return next(err); }
           // console.log('MATCHING SITE', prefix, err, site);
           if (!site) {
             res.status(418);
