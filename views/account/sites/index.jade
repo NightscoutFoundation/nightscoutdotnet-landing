@@ -55,6 +55,7 @@ block body
                 | Uploaders
                 a.mqtt-upload.hidden
                 a.http-upload.hidden
+                a.http-xdrip-upload.hidden
               a.v.settings.btn
                 i.fa.fa-cog
 
@@ -97,12 +98,19 @@ block body
             li
               a(href="#http-upload-qr", data-toggle="tab")
                 | HTTP
+            li
+              a(href="#http-xdrip-upload-qr", data-toggle="tab")
+                tt xdrip (prev beta v2.0.0)
           .tab-content
             div.active.tab-pane#mqtt-upload-qr(role="tabpanel")
               div.code
               p
                 tt.uri
             div.tab-pane#http-upload-qr(role="tabpanel")
+              div.code
+              p
+                tt.uri
+            div.tab-pane#http-xdrip-upload-qr(role="tabpanel")
               div.code
               p
                 tt.uri

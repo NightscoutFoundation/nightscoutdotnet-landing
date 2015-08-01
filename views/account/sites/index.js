@@ -307,6 +307,7 @@ function sitePrefixes (bases) {
     var mqtt_auth = [ item.uploader_prefix, item.api_secret ].join(':');
     item.domain = item.name + bases.viewer;
     item.upload = 'https://' + item.api_secret + '@' + item.uploader_prefix + bases.uploader + '/api/v1';
+    item.xdrip = item.api_secret + '@' + 'https://' + item.uploader_prefix + bases.uploader + '/api/v1';
     item.mqtt_monitor = 'tcp://' + mqtt_auth + '@' + bases.mqtt.public;
     item.settings = '/account/sites/' + item.name;
     item.guest = '-' + item.uploader_prefix.slice(0, 6) + bases.guest;

@@ -64,6 +64,7 @@
     clone.find('A.v.clock-mode').attr('href', base + '/clock.html');
     clone.find('A.mqtt-upload').attr('href', item.mqtt_monitor);
     clone.find('A.http-upload').attr('href', item.upload);
+    clone.find('A.http-xdrip-upload').attr('href', item.xdrip);
     clone.find('A.v.settings').attr('href', item.settings);
     return clone;
   }
@@ -304,6 +305,7 @@
       var uris = {
         mqtt: button.find('A.mqtt-upload').attr('href')
       , rest: button.find('A.http-upload').attr('href')
+      , xdrip: button.find('A.http-xdrip-upload').attr('href')
       };
       var json;
       json = {mqtt: { uri: uris.mqtt }};
@@ -312,6 +314,9 @@
       json = {rest: { endpoint: [uris.rest] } };
       $('#http-upload-qr .code').empty( ).qrcode(JSON.stringify(json));
       $('#http-upload-qr .uri').empty( ).text(uris.rest);
+      json = {rest: { endpoint: [uris.xdrip] } };
+      $('#http-xdrip-upload-qr .code').empty( ).qrcode(JSON.stringify(json));
+      $('#http-xdrip-upload-qr .uri').empty( ).text(uris.xdrip);
     });
 
     $('[data-ajax-target]').each(function (idx, elem) {
