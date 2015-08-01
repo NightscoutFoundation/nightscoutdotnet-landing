@@ -201,7 +201,7 @@ function do_uploader_rewrite (req, res, next) {
   var original_host = req.headers['x-forwarded-host'] || req.hostname;
   var pat = '-u' + req.app.config.cookie.domain;
   var prefix = original_host.split(pat).slice(0, -1).join("");
-  var scheme = req.headers['x-forwarded-proto'];
+  var scheme = req.headers['x-forwarded-proto'] || 'https';
   var api_secret = req.headers['api-secret'];
   if (!req.user || !req.isAuthenticated( )) {
     console.log('CONSIDERING UPLOADER', prefix);
