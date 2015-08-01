@@ -244,7 +244,7 @@ function do_nginx_rewrite (req, res, next) {
   var original_host = req.headers['x-forwarded-host'] || req.hostname;
   var pat = req.app.config.proxy.PREFIX.VIEWER;
   var prefix = original_host.split(pat).slice(0, -1).join("");
-  var scheme = req.headers['x-forwarded-proto'];
+  var scheme = req.headers['x-forwarded-proto'] || 'https';
   if (!req.user || !req.isAuthenticated( )) {
     console.log('SKIPPING PROXY sending to next');
     if (prefix) {
