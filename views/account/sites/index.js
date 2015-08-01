@@ -349,6 +349,9 @@ exports.remove = function(req, res, next) {
   };
   console.log('removing', name, 'from backend', delete_url);
   request.del(delete_url, function done (err, result, body) {
+    if (err) {
+      return next(err);
+    }
     console.log('removed from backends', result.statusCode, body);
     // req.user.roles.account.sites.pull(q);
     console.log('begin sites for account', req.user.roles.account.sites.length);
