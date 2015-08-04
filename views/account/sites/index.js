@@ -344,8 +344,13 @@ exports.remove = function(req, res, next) {
   if (site.name != name) {
     throw "bad";
   }
-  var api = req.app.config.proxy.api;
-  var delete_url = api + '/environs/' + site.internal_name;
+
+  // var api = req.app.config.proxy.api;
+  var account_id = req.user.roles.account._id;
+  var api = req.app.config.proxy.provision;
+  var delete_url = api + '/accounts/' + account_id + '/sites/' + site.internal_name;
+  // var url = api + '/accounts/' + account_id + '/sites/' + req.site.internal_name;
+
   var q = {
     name: name
   , account: { id: req.user.roles.account._id },
