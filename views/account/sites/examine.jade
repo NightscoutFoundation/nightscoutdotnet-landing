@@ -101,14 +101,18 @@ block body
                 label.btn.btn-default
                   = ' Nightmode '
                   input.e.env.NIGHT_MODE.binary-data-label.toggle-check(type="checkbox", data-size="mini", data-toggle="toggle", data-on="On", data-off="Off", name="NIGHT_MODE")
+              .panel-heading
+                label.btn.btn-default
+                  = ' Show raw data '
+                  input.enabler.enable_rawbg.toggle-check(type="checkbox", data-size="mini", data-toggle="toggle", data-onx="mg/dL", data-offx="mmol", value="rawbg")
               div.panel-body
                 label.btn.btn-default
-                  = ' Show raw data  '
-                  select.e.env.SHOW_RAWBG.chosen-select(data-placeholder="Enable", data-width="48%", name="SHOW_RAWBG")
-                    option(selected="selected", value="always")
-                      | always
-                    option(value="never")
+                  = ' When  '
+                  select.e.env.SHOW_RAWBG.chosen-select(data-placeholder="Enable", data-width="51", name="SHOW_RAWBG")
+                    option(selected="selected", value="never")
                       | never
+                    option( value="always")
+                      | always
                     option(value="noise")
                       | noise
               //- div.panel-body

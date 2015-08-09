@@ -115,7 +115,7 @@
     if (enabled) {
       dom.find('.alarm_type').prop('checked', null).trigger('change');
       for (f in enabled) {
-        dom.find('.alarm_type' + '.enable_' + enabled[f]).attr('checked', 'checked').trigger('change');
+        dom.find('.alarm_type' + '.enable_' + enabled[f]).prop('checked', 'checked').trigger('change');
       }
     }
     return dom;
@@ -154,7 +154,7 @@
   }
 
   function env_config (env) {
-    var enabled = [null].concat((env.ENABLE || '').split(' '));
+    var enabled = [null].concat((env.ENABLE || 'delta direction ar2 errorcodes').split(' '));
     var config = { };
     var known = [
         'careportal' , 'rawbg' , 'iob' , 'cob'
